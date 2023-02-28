@@ -3,15 +3,16 @@ title: "Stata's `margins` command"
 author: "Josh Errickson"
 date: "`r Sys.Date()`"
 output:
-  revealjs::revealjs_presentation:
-    theme: moon
-    transition: none
-    slide_level: 1
-    reveal_options:
-      slideNumber: true
-      fig_caption: false
-      navigation: linear
+  slidy_presentation:
+    theme: readable
+    css: style.css
 ---
+
+# Overview
+
+- `margins` as a post-estimation command
+- `margins` with categorical variables
+- `margins` with interactions and continuous variables
 
 
 ```{r child = 'stata_markdown/stata.Rmd'}
