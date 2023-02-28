@@ -14,5 +14,5 @@ output:
 ---
 
 
-```{r child = 'stata.Rmd'}
+```{r child = 'stata_markdown/stata.Rmd'}
 ```
