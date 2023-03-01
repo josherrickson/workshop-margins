@@ -1,6 +1,6 @@
 # Post-estimation command
 
-- Stata "estimation" commands are primarly those which fit models.
+- Stata "estimation" commands are primarily those which fit models.
     - E.g. `regress`, `logit`, `mixed`, `xtreg`.
 - Stata "stores" the most recent estimation command.
 - `margins` is a post-estimation command; meaning it will use the most recently
@@ -16,7 +16,7 @@ list in 1
 <</dd_do>>
 ~~~~
 
----
+# Fitting the model
 
 ~~~~
 <<dd_do>>
@@ -32,7 +32,7 @@ regress wage i.race
 | Other | ??? | | Black vs Other | ??? |
 </center>
 
----
+# Calculating group effects and comparisons
 
 ~~~~
 <<dd_do>>
@@ -51,8 +51,6 @@ $$
 | Black | <<dd_display:%12.3f e(b)[1,4]>> + <<dd_display:%12.3f e(b)[1,2]>> = <<dd_display:%12.3f e(b)[1,4] + e(b)[1,2]>> |
 | Other | <<dd_display:%12.3f e(b)[1,4]>> + <<dd_display:%12.3f e(b)[1,3]>> = <<dd_display:%12.3f e(b)[1,4] + e(b)[1,3]>> |
 </center>
-
-&nbsp;
 
 <center>
 | Comparison | Estimate |
@@ -105,7 +103,7 @@ margins [categorical variable]
 Pairwise comparisons between groups
 
 ```
-margins [categorical variable], pwcompare(ci) // Produce confidence intervals
+margins [categorical variable], pwcompare(ci) // Produce confidence intervals, default
 margins [categorical variable], pwcompare(pv) // Produce p-values
 ```
 
@@ -128,19 +126,27 @@ margins married
 <</dd_do>>
 ~~~~
 
-# Setting values of other covariates, 1
+# Visualization of `margins`
 
 ```
-margins [categorical variable]
+margins married
 ```
 
 ![](asobserved.png)
 
 Sometimes called "as observed".
 
-# Setting values of other covariates, 2
+# Choices for ways to handle other covariates
 
-## `atmeans`
+1. As observed (default)
+   - Average of predicted outcomes
+2. `atmeans`
+   - Predicted outcome at average
+3. `at` specific values
+   - Predicted outcome at specific values
+4. Combination (if multiple covariates)
+
+# `atmeans`
 
 ~~~~
 <<dd_do>>
@@ -153,17 +159,15 @@ margins married, atmeans
 - As observed and `atmeans` are identical for linear models; but differ for
   generalized linear models (we'll see later).
 
-# Setting values of other covariates, 3
+# Visualization of `margins, atmeans`
 
 ```
-margins [categorical variable], atmeans
+margins married, atmeans
 ```
 
 ![](atmeans.png)
 
-# Setting values of other covariates, 4
-
-## `at`
+# `at` specific values
 
 You can manually fix the values of other variables in the model.
 
@@ -178,10 +182,43 @@ where `<numlist>` can be any of:
 - range with step-by instruction (`3(.5)5` is equivalent to `3 3.5 4 4.5 5`)
 - any combination of the above (`3 5/7 8(.25)9`)
 
-# Setting values of other covariates, 5
+# `at` specific values example
 
 ~~~~
 <<dd_do>>
 margins married, at(age = (25(5)35))
 <</dd_do>>
 ~~~~
+
+# Visualization of `margins, at(...)`
+
+```
+margins married, at(age = (25(5)30))
+```
+
+![](atvals.png)
+
+# Combining these effects
+
+We can combine these if we have multiple predictors.
+
+~~~~
+<<dd_do>>
+regress wage i.married age i.south, noheader
+<</dd_do>>
+~~~~
+
+# Combining these effects, 2
+
+```
+regress wage i.married age i.south
+```
+
+~~~~
+<<dd_do>>
+margins married, at(south = (1)) atmeans
+<</dd_do>>
+~~~~
+
+- Note the use of a categorical variable (`south`) in `at()`.
+- Recall that `married`'s means are ignored.
