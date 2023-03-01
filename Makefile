@@ -10,7 +10,7 @@ stata_markdown/%.Rmd: stata_markdown/%.md
 index.html: index.Rmd $(Stata_Rmd)
 	@echo "$< -> $@"
 #	Bring images temporarily up to main directory
-	@cp $(stata_file_path)/*.svg . 2>/dev/null || :
+	@cp stata_markdown/*.svg . 2>/dev/null || :
 	@Rscript -e "rmarkdown::render('$<')"
 #	Remove any images copied up
 	@rm -rf *.svg
