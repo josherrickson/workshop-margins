@@ -26,7 +26,7 @@ regress wage i.race
 ~~~~
 
 <center>
-| Group | Average | &nbsp;&nbsp;&nbsp;&nbsp;| Comparison | Diff. in Averages |
+| Group | Average | &nbsp;| Comparison | Diff. in Averages |
 |:-:|:-:|-|:-:|:-:|
 | White | <<dd_display:%12.3f e(b)[1,4]>> | | White vs Black | <<dd_display:%12.3f e(b)[1,2]>> |
 | Black | ??? | | White vs Other | <<dd_display:%12.3f e(b)[1,3]>> |
