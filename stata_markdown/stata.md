@@ -60,7 +60,9 @@ $$
 | Black vs Other | <<dd_display:%12.3f e(b)[1,3]>> - <<dd_display:%12.3f e(b)[1,2]>> = <<dd_display:%12.3f e(b)[1,3] - e(b)[1,2]>> |
 </center>
 
-# `margins` does this for us!
+# Estimated means
+
+`margins` does this for us!
 
 <center>
 | Group | Average |
@@ -76,7 +78,7 @@ margins race
 <</dd_do>>
 ~~~~
 
-# `margins` does this for us!
+# Differences in estimated means
 
 <center>
 | Comparison | Diff. In Averages |
@@ -92,7 +94,7 @@ margins race, pwcompare
 <</dd_do>>
 ~~~~
 
-# Syntax for categorical variables.
+# Syntax for estimated means
 
 Average outcome per level
 
@@ -237,7 +239,7 @@ margins married, at(south = (1)) atmeans
 - Note the use of a categorical variable (`south`) in `at()`.
 - Recall that `married`'s means are ignored.
 
-# Estimating slopes
+# Estimated slopes
 
 Everything we've done so far is estimating means. We can estimate slopes with
 the `dydx` option.
@@ -258,7 +260,7 @@ margins, dydx(age)
 <</dd_do>>
 ~~~~
 
-# Estimating slopes, comments
+# Estimated marginal slopes, comments
 
 - This will get a lot more useful when we discuss interactions next.
 - Handling additional covariates with "as observed"/`atmeans` or `at` continues
@@ -370,7 +372,7 @@ margins married
 <</dd_do>>
 ~~~~
 
-# Estimate in all unique subgroups
+# Estimated means in all unique subgroups
 
 ~~~~
 <<dd_do>>
@@ -448,7 +450,7 @@ regress wage c.age##i.race, noheader
 | Other | ??? | | Black vs Other | ??? |
 </center>
 
-# Estimating slopes in each `race`
+# Estimating marginal slopes in each `race`
 
 ~~~~
 <<dd_do>>
@@ -456,7 +458,7 @@ margins race, dydx(age)
 <</dd_do>>
 ~~~~
 
-# Testing for differences between slopes
+# Testing for differences between marginal slopes
 
 ~~~~
 <<dd_do>>
@@ -472,7 +474,7 @@ margins race, at(age = (35 45))
 <</dd_do>>
 ~~~~
 
-# Testing for differences of means at specific values of `age`
+# Testing for differences of marginal means at specific values of `age`
 
 ~~~~
 <<dd_do>>
@@ -494,7 +496,7 @@ regress wage c.age##c.ttl_exp
 <</dd_do>>
 ~~~~
 
-# Slope at specific values
+# Marginal slope at specific values
 
 ~~~~
 <<dd_do>>
@@ -532,7 +534,7 @@ hist ttl_exp
     - `recastci()` allows us to use a different plot type for the confidence
       bounds.
 
----
+# Estimated means
 
 ~~~~
 <<dd_do>>
@@ -546,7 +548,7 @@ marginsplot
 <<dd_graph: replace>>
 </center>
 
----
+# Estimated means as bar chart
 
 ~~~~
 <<dd_do>>
@@ -558,7 +560,7 @@ marginsplot, recast(bar)
 <<dd_graph: replace>>
 </center>
 
----
+# Interaction plot, categorical-continuous
 
 ~~~~
 <<dd_do>>
@@ -572,7 +574,7 @@ marginsplot
 <<dd_graph: replace>>
 </center>
 
----
+# Interaction plot, continuous-continuous
 
 ~~~~
 <<dd_do>>
@@ -586,7 +588,7 @@ marginsplot
 <<dd_graph: replace>>
 </center>
 
----
+# Switching the x-dimension
 
 ~~~~
 <<dd_do>>
@@ -601,3 +603,127 @@ marginsplot, xdim(ttl_exp)
 </center>
 
 # `margins` with non-linear models
+
+The `margins` command produces estimates on the scale of the outcome. E.g. for a
+logistic regression model, the results are in the probability scale.
+
+~~~~
+<<dd_do>>
+logit union c.hours##i.married, or nolog
+<</dd_do>>
+~~~~
+
+# `margins` after `logit`
+
+~~~~
+<<dd_do>>
+margins married, at(hours = 40)
+<</dd_do>>
+~~~~
+
+~~~~
+<<dd_do: quietly>>
+margins married, at(hours = 40) post
+<</dd_do>>
+~~~~
+
+Thus the model predicts that <<dd_display:%12.2f 100*e(b)[1,1]>>% of unmarried
+workers and <<dd_display:%12.2f 100*e(b)[1,2]>>% of married workers have a
+positive outcome when working 40 hour weeks.
+
+# `marginsplot` after `logit`
+
+~~~~
+<<dd_do: quietly>>
+logit union c.hours##i.married, or nolog
+<</dd_do>>
+~~~~
+
+~~~~
+<<dd_do>>
+quietly margins married, at(hours = (30 40 50))
+marginsplot, recastci(rarea) ciopt(color(%20))
+<</dd_do>>
+~~~~
+
+<center>
+<<dd_graph: replace>>
+</center>
+
+# Count models
+
+For Poisson models (or negative binomial), the results are in the count scale.
+
+~~~~
+<<dd_do>>
+poisson wage i.married##c.hours
+<</dd_do>>
+~~~~
+
+# `margins` after `poisson`
+
+~~~~
+<<dd_do>>
+margins married, at(hours = 40)
+<</dd_do>>
+~~~~
+
+# `marginsplot` after `poisson`
+
+~~~~
+<<dd_do>>
+quietly margins married, at(hours = (35 40 45))
+marginsplot, yscale(range(6 10)) ylabel(6(1)10)
+<</dd_do>>
+~~~~
+
+<center>
+<<dd_graph: replace>>
+</center>
+
+# `margins` versus regression coefficients
+
+Of course, in GLMs, the estimated coefficients are not additive on the scale of
+the outcome.
+
+- logistic models: odds ratios
+- count models: incidence rate ratios
+
+However, `margins` *does* produce results on the outcome scale.
+
+Therefore, `margins` is not an appropriate tool to, for example, obtain odds
+ratios between all pairs of groups in a categorical variable.
+
+## Why use `margins` after a non-linear model?
+
+Probabilities and counts are easily to interpret than odds ratios and rate
+ratios.
+
+Interaction plots are easier to interpret that regression coefficients.
+
+## If you do want odds ratios...
+
+... use the `nlcom` post-estimation command.
+
+```
+logit union i.race
+logit, coeflegend
+nlcom (white_black: exp(_b[2.race])) (white_other: exp(_b[3.race])) ///
+      (black_other: exp(_b[2.race] - _b[3.race]))
+```
+
+# Miscellanous things about `margins`
+
+# Other resources
+
+https://errickson.net/marginsnotes/
+
+  - Worked examples of a number of different marginal targets, including code for Stata and R
+
+https://www.stata.com/manuals/rmargins.pdf
+
+  - 58 pages
+
+https://www.stata.com/manuals/rmarginsplot.pdf
+
+  - 35 pages
