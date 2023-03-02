@@ -8,12 +8,6 @@ output:
     css: style.css
 ---
 
-# Overview
-
-- `margins` as a post-estimation command
-- `margins` with categorical variables
-- `margins` with interactions and continuous variables
-
 
 ```{r child = 'stata_markdown/stata.Rmd'}
 ```

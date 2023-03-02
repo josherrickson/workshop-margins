@@ -5,7 +5,8 @@
 - Stata "stores" the most recent estimation command.
 - `margins` is a post-estimation command; meaning it will use the most recently
   run estimation.
-- `margins` itself is *not* an estimation command
+- `margins` itself is *not* an estimation command.
+
 
 # Categorical variables
 
@@ -60,9 +61,24 @@ $$
 | Black vs Other | <<dd_display:%12.3f e(b)[1,3]>> - <<dd_display:%12.3f e(b)[1,2]>> = <<dd_display:%12.3f e(b)[1,3] - e(b)[1,2]>> |
 </center>
 
+# Changing reference category
+
+~~~~
+<<dd_do>>
+regress wage ib2.race, noheader
+regress wage ib3.race, noheader
+<</dd_do>>
+~~~~
+
 # Estimated means
 
 `margins` does this for us!
+
+~~~~
+<<dd_do: quietly>>
+regress wage i.race
+<</dd_do>>
+~~~~
 
 <center>
 | Group | Average |
@@ -188,14 +204,14 @@ where `<numlist>` can be any of:
 
 ~~~~
 <<dd_do>>
-margins married, at(age = (25(5)35))
+margins married, at(age = (35(5)45))
 <</dd_do>>
 ~~~~
 
 # Visualization of `margins, at(...)`
 
 ```
-margins married, at(age = (25(5)30))
+margins married, at(age = (35(5)45))
 ```
 
 ![](atvals.png)
@@ -206,7 +222,7 @@ We can also use `at` with continuous variables without a categorical variable.
 
 ~~~~
 <<dd_do>>
-margins, at(age = (25(5)30))
+margins, at(age = (35(5)45))
 <</dd_do>>
 ~~~~
 
@@ -220,14 +236,14 @@ predictors.
 
 ~~~~
 <<dd_do>>
-regress wage i.married age i.south, noheader
+regress wage age i.married i.south, noheader
 <</dd_do>>
 ~~~~
 
 # Combining these effects, 2
 
 ```
-regress wage i.married age i.south
+regress wage age i.married i.south
 ```
 
 ~~~~
@@ -316,6 +332,9 @@ regress wage i.race
 | Other | ??? | | Black vs Other | ??? |
 </center>
 
+We only get 50% of relevant pieces of information from the regression
+coefficients.
+
 When we begin to include interactions in the model, even less useful information
 can be extracted via regression coefficients alone.
 
@@ -330,11 +349,10 @@ regress wage i.married##i.race, noheader
 $3\times2 = 6$ total subgroups, $\binom{6}{2} = 15$ different pairwise
 comparisons.
 
-Regression coefficients: 1 subgroup, 5 pairwise comparisons.
+Regression coefficients: 1 subgroup, 5 pairwise comparisons - only 29% of
+relevant pieces of information!
 
 # `margins` syntax with interactions
-
-We have a far larger number of useful syntaxes now.
 
 - Average of each level of `married`, averaged across `race`:
 
@@ -468,6 +486,9 @@ margins race, dydx(age) pwcompare(pv)
 
 # Looking at it the other way
 
+Prior was "Differences in effect of age across race". Now looking at "differnces
+in races across values of age":
+
 ~~~~
 <<dd_do>>
 margins race, at(age = (35 45))
@@ -485,6 +506,8 @@ margins race, at(age = (35)) pwcompare(pv)
 If our `at` contains multiple values of `age`, we'll get too many uninteresting
 results, so repeat with `margins race, at(age = (45)) pwcompare(pv)`.
 
+Be precise your choice of `age` values - junk in, junk out.
+
 # Continuous-continuous interactions
 
 With a continuous-continuous interaction, we generally want to estimate the
@@ -500,7 +523,7 @@ regress wage c.age##c.ttl_exp
 
 ~~~~
 <<dd_do>>
-margins, dydx(age) at(ttl_exp = (5(5)15))
+margins, dydx(age) at(ttl_exp = (5(5)20))
 <</dd_do>>
 ~~~~
 
@@ -533,6 +556,7 @@ hist ttl_exp
     - `recast()` allows us to use a different plot type for the estimates.
     - `recastci()` allows us to use a different plot type for the confidence
       bounds.
+- `marginsplot` when there's an interaction produces an "interaction plot."
 
 # Estimated means
 
@@ -559,6 +583,30 @@ marginsplot, recast(bar)
 <center>
 <<dd_graph: replace>>
 </center>
+
+# Plotting non-linear slopes
+
+~~~~
+<<dd_do>>
+quietly regress wage c.age##c.age
+margins, dydx(age) at(age = (35(5)45))
+<</dd_do>>
+~~~~
+
+# Plotting non-linear slopes, 2
+
+~~~~
+<<dd_do>>
+quietly margins, at(age = (35(.5)45)) nose
+marginsplot, recast(line)
+<</dd_do>>
+~~~~
+
+<center>
+<<dd_graph: replace>>
+</center>
+
+`nose` option suppresses standard errors. (Much faster calculation too!)
 
 # Interaction plot, categorical-continuous
 
@@ -630,6 +678,21 @@ margins married, at(hours = 40) post
 Thus the model predicts that <<dd_display:%12.2f 100*e(b)[1,1]>>% of unmarried
 workers and <<dd_display:%12.2f 100*e(b)[1,2]>>% of married workers have a
 positive outcome when working 40 hour weeks.
+
+# "as observed" vs `atmeans`
+
+~~~~
+<<dd_do:quietly>>
+logit union c.hours##i.married, or nolog
+<</dd_do>>
+~~~~
+
+~~~~
+<<dd_do>>
+margins married
+margins married, atmeans
+<</dd_do>>
+~~~~
 
 # `marginsplot` after `logit`
 
@@ -714,16 +777,22 @@ nlcom (white_black: exp(_b[2.race])) (white_other: exp(_b[3.race])) ///
 
 # Miscellanous things about `margins`
 
+- `margins` are **not** fitting a different model! It is **not** a separate
+  analysis.
+- Higher-order interactions work as expected:
+  - `regress y a##b##c`
+  - `margins a#b#c`
+  - `margin a#c, at(b = (3 5))`
+- The `expression` option can apply transformations to margins.
+  - E.g. after `logit` to get things on probability scale:
+    - `margins, expression(100*predict(pr))`
+- `post` option turns `margins` into an estimation command
+
 # Other resources
 
-https://errickson.net/marginsnotes/
-
+- https://errickson.net/marginsnotes/
   - Worked examples of a number of different marginal targets, including code for Stata and R
-
-https://www.stata.com/manuals/rmargins.pdf
-
+- https://www.stata.com/manuals/rmargins.pdf
   - 58 pages
-
-https://www.stata.com/manuals/rmarginsplot.pdf
-
+- https://www.stata.com/manuals/rmarginsplot.pdf
   - 35 pages
