@@ -164,6 +164,14 @@ Sometimes called "as observed".
    - Predicted outcome at specific values
 4. Combination (if multiple covariates)
 
+# Visualization of `margins, atmeans`
+
+```
+margins married, atmeans
+```
+
+![](atmeans.png)
+
 # `atmeans`
 
 ~~~~
@@ -176,14 +184,6 @@ margins married, atmeans
 `married`.
 - As observed and `atmeans` are identical for linear models; but differ for
   generalized linear models (we'll see later).
-
-# Visualization of `margins, atmeans`
-
-```
-margins married, atmeans
-```
-
-![](atmeans.png)
 
 # `at` specific values
 
@@ -486,8 +486,8 @@ margins race, dydx(age) pwcompare(pv)
 
 # Looking at it the other way
 
-Prior was "Differences in effect of age across race". Now looking at "differnces
-in races across values of age":
+Prior was "Differences in effect of age across race". Now looking at
+"differences in races across values of age":
 
 ~~~~
 <<dd_do>>
