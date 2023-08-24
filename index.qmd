@@ -1082,7 +1082,7 @@ Be sure to choose reasonable values of continuous variables.
 ```
 
 <center>
-![](images/img01.png)
+![](images/img01.svg)
 </center>
 
 ## `marginsplot`
@@ -1113,7 +1113,7 @@ Variables that uniquely identify margins: race
 ```
 
 <center>
-![](images/img02.png)
+![](images/img02.svg)
 </center>
 
 ## Estimated means as bar chart
@@ -1126,7 +1126,7 @@ Variables that uniquely identify margins: race
 ```
 
 <center>
-![](images/img03.png)
+![](images/img03.svg)
 </center>
 
 ## Plotting non-linear slopes
@@ -1170,7 +1170,7 @@ Variables that uniquely identify margins: age
 ```
 
 <center>
-![](images/img04.png)
+![](images/img04.svg)
 </center>
 
 `nose` option suppresses standard errors and performs much faster calculation
@@ -1191,7 +1191,7 @@ Variables that uniquely identify margins: age race
 ```
 
 <center>
-![](images/img05.png)
+![](images/img05.svg)
 </center>
 
 ## Interaction plot, continuous-continuous
@@ -1208,7 +1208,7 @@ Variables that uniquely identify margins: age ttl_exp
 ```
 
 <center>
-![](images/img06.png)
+![](images/img06.svg)
 </center>
 
 ## Switching the x-dimension
@@ -1225,7 +1225,7 @@ Variables that uniquely identify margins: age ttl_exp
 ```
 
 <center>
-![](images/img07.png)
+![](images/img07.svg)
 </center>
 
 ## `margins` with non-linear models
@@ -1340,7 +1340,7 @@ Variables that uniquely identify margins: hours married
 ```
 
 <center>
-![](images/img08.png)
+![](images/img08.svg)
 </center>
 
 ## Count models
@@ -1410,7 +1410,7 @@ Variables that uniquely identify margins: hours married
 ```
 
 <center>
-![](images/img09.png)
+![](images/img09.svg)
 </center>
 
 ## `margins` versus regression coefficients

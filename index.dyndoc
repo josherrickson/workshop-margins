@@ -581,7 +581,7 @@ hist ttl_exp
 ```
 
 <center>
-<<dd_graph: replace markdown saving(images/img01.png)>>
+<<dd_graph: replace markdown saving(images/img01.svg)>>
 </center>
 
 ## `marginsplot`
@@ -609,7 +609,7 @@ marginsplot
 ```
 
 <center>
-<<dd_graph: replace markdown saving(images/img02.png)>>
+<<dd_graph: replace markdown saving(images/img02.svg)>>
 </center>
 
 ## Estimated means as bar chart
@@ -621,7 +621,7 @@ marginsplot, recast(bar)
 ```
 
 <center>
-<<dd_graph: replace markdown saving(images/img03.png)>>
+<<dd_graph: replace markdown saving(images/img03.svg)>>
 </center>
 
 ## Plotting non-linear slopes
@@ -643,7 +643,7 @@ marginsplot, recast(line)
 ```
 
 <center>
-<<dd_graph: replace markdown saving(images/img04.png)>>
+<<dd_graph: replace markdown saving(images/img04.svg)>>
 </center>
 
 `nose` option suppresses standard errors and performs much faster calculation
@@ -661,7 +661,7 @@ marginsplot
 ```
 
 <center>
-<<dd_graph: replace markdown saving(images/img05.png)>>
+<<dd_graph: replace markdown saving(images/img05.svg)>>
 </center>
 
 ## Interaction plot, continuous-continuous
@@ -675,7 +675,7 @@ marginsplot
 ```
 
 <center>
-<<dd_graph: replace markdown saving(images/img06.png)>>
+<<dd_graph: replace markdown saving(images/img06.svg)>>
 </center>
 
 ## Switching the x-dimension
@@ -689,7 +689,7 @@ marginsplot, xdim(ttl_exp)
 ```
 
 <center>
-<<dd_graph: replace markdown saving(images/img07.png)>>
+<<dd_graph: replace markdown saving(images/img07.svg)>>
 </center>
 
 ## `margins` with non-linear models
@@ -746,7 +746,7 @@ marginsplot, recastci(rarea) ciopt(color(%20))
 ```
 
 <center>
-<<dd_graph: replace markdown saving(images/img08.png)>>
+<<dd_graph: replace markdown saving(images/img08.svg)>>
 </center>
 
 ## Count models
@@ -777,7 +777,7 @@ marginsplot, yscale(range(6 10)) ylabel(6(1)10)
 ```
 
 <center>
-<<dd_graph: replace markdown saving(images/img09.png)>>
+<<dd_graph: replace markdown saving(images/img09.svg)>>
 </center>
 
 ## `margins` versus regression coefficients
