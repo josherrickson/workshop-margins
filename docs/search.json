@@ -1,0 +1,436 @@
+[
+  {
+    "objectID": "index.html#post-estimation-command",
+    "href": "index.html#post-estimation-command",
+    "title": "Stata’s margins command",
+    "section": "Post-estimation command",
+    "text": "Post-estimation command\n\nStata “estimation” commands are primarily those which fit models.\n\nE.g. regress, logit, mixed, xtreg.\n\nStata “stores” the most recent estimation command.\nmargins is a post-estimation command; meaning it will use the most recently run estimation.\nmargins itself is not an estimation command."
+  },
+  {
+    "objectID": "index.html#categorical-variables",
+    "href": "index.html#categorical-variables",
+    "title": "Stata’s margins command",
+    "section": "Categorical variables",
+    "text": "Categorical variables\n. sysuse nlsw88\n(NLSW, 1988 extract)\n\n. list in 1\n\n     +----------------------------------------------------------------+\n  1. | idcode | age  |  race  | married  |    never_married  | grade  |\n     |      1 |  37  | Black  |  Single  | Has been married  |    12  |\n     |----------------------------------------------------------------|\n     |          collgrad  |      south  |  smsa  |            c_city  |\n     |  Not college grad  |  Not south  |  SMSA  |  Not central city  |\n     |----------------------------------------------------------------|\n     |               industry | occupation | union |     wage | hours |\n     | Transport/Comm/Utility | Operatives | Union | 11.73913 |    48 |\n     |----------------------------------------------------------------|\n     |            ttl_exp            |              tenure            |\n     |           10.33333            |            5.333333            |\n     +----------------------------------------------------------------+"
+  },
+  {
+    "objectID": "index.html#fitting-the-model",
+    "href": "index.html#fitting-the-model",
+    "title": "Stata’s margins command",
+    "section": "Fitting the model",
+    "text": "Fitting the model\n. regress wage i.race\n\n      Source |       SS           df       MS      Number of obs   =     2,246\n-------------+----------------------------------   F(2, 2243)      =     10.28\n       Model |  675.510282         2  337.755141   Prob &gt; F        =    0.0000\n    Residual |  73692.4571     2,243  32.8544169   R-squared       =    0.0091\n-------------+----------------------------------   Adj R-squared   =    0.0082\n       Total |  74367.9674     2,245  33.1260434   Root MSE        =    5.7319\n\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n        race |\n      Black  |  -1.238442   .2764488    -4.48   0.000    -1.780564   -.6963193\n      Other  |   .4677818   1.133005     0.41   0.680    -1.754067    2.689631\n             |\n       _cons |   8.082999   .1416683    57.06   0.000     7.805185    8.360814\n------------------------------------------------------------------------------\n\n\n\n\n\n\nGroup\nAverage\n\n\n\n\nWhite\n8.083\n\n\nBlack\n???\n\n\nOther\n???\n\n\n\n\n\n\n\n\nComparison\nDiff. in Averages\n\n\n\n\nWhite vs Black\n-1.238\n\n\nWhite vs Other\n0.468\n\n\nBlack vs Other\n???"
+  },
+  {
+    "objectID": "index.html#calculating-group-effects-and-comparisons",
+    "href": "index.html#calculating-group-effects-and-comparisons",
+    "title": "Stata’s margins command",
+    "section": "Calculating group effects and comparisons",
+    "text": "Calculating group effects and comparisons\n. regress, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n        race |\n      Black  |  -1.238442   .2764488    -4.48   0.000    -1.780564   -.6963193\n      Other  |   .4677818   1.133005     0.41   0.680    -1.754067    2.689631\n             |\n       _cons |   8.082999   .1416683    57.06   0.000     7.805185    8.360814\n------------------------------------------------------------------------------\n\\[\nwage = \\beta_0 + \\beta_1\\textrm{Black} + \\beta_2\\textrm{Other} + \\epsilon\n\\]\n\n\n\n\n\nGroup\nAverage\n\n\n\n\nWhite\n8.083\n\n\nBlack\n8.083 + -1.238 = 6.845\n\n\nOther\n8.083 + 0.468 = 8.551\n\n\n\n\n\n\n\nComparison\nDiff. in Averages\n\n\n\n\nWhite vs Black\n-1.238\n\n\nWhite vs Other\n0.468\n\n\nBlack vs Other\n0.468 - ( -1.238) = 1.706"
+  },
+  {
+    "objectID": "index.html#changing-reference-category",
+    "href": "index.html#changing-reference-category",
+    "title": "Stata’s margins command",
+    "section": "Changing reference category",
+    "text": "Changing reference category\n. regress wage ib2.race, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n        race |\n      White  |   1.238442   .2764488     4.48   0.000     .6963193    1.780564\n      Other  |   1.706223   1.148906     1.49   0.138    -.5468071    3.959254\n             |\n       _cons |   6.844558   .2373901    28.83   0.000     6.379031    7.310085\n------------------------------------------------------------------------------\n\n. regress wage ib3.race, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n        race |\n      White  |  -.4677818   1.133005    -0.41   0.680    -2.689631    1.754067\n      Black  |  -1.706223   1.148906    -1.49   0.138    -3.959254    .5468071\n             |\n       _cons |   8.550781   1.124114     7.61   0.000      6.34637    10.75519\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#estimated-means",
+    "href": "index.html#estimated-means",
+    "title": "Stata’s margins command",
+    "section": "Estimated means",
+    "text": "Estimated means\n\n\nmargins does this for us!\n\n\n\n\n\nGroup\nAverage\n\n\n\n\nWhite\n8.083\n\n\nBlack\n8.083 + -1.238 = 6.845\n\n\nOther\n8.083 + 0.468 = 8.551\n\n\n\n\n\n\n. margins race\n\nAdjusted predictions                                     Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n        race |\n      White  |   8.082999   .1416683    57.06   0.000     7.805185    8.360814\n      Black  |   6.844558   .2373901    28.83   0.000     6.379031    7.310085\n      Other  |   8.550781   1.124114     7.61   0.000      6.34637    10.75519\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#differences-in-estimated-means",
+    "href": "index.html#differences-in-estimated-means",
+    "title": "Stata’s margins command",
+    "section": "Differences in estimated means",
+    "text": "Differences in estimated means\n\n\n\n\nComparison\nDiff. In Averages\n\n\n\n\nWhite vs Black\n-1.238\n\n\nWhite vs Other\n0.468\n\n\nBlack vs Other\n0.468 - -1.238 = 1.706\n\n\n\n\n. margins race, pwcompare\n\nPairwise comparisons of adjusted predictions             Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n\n-----------------------------------------------------------------\n                |            Delta-method         Unadjusted\n                |   Contrast   std. err.     [95% conf. interval]\n----------------+------------------------------------------------\n           race |\nBlack vs White  |  -1.238442   .2764488     -1.780564   -.6963193\nOther vs White  |   .4677818   1.133005     -1.754067    2.689631\nOther vs Black  |   1.706223   1.148906     -.5468071    3.959254\n-----------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#syntax-for-estimated-means",
+    "href": "index.html#syntax-for-estimated-means",
+    "title": "Stata’s margins command",
+    "section": "Syntax for estimated means",
+    "text": "Syntax for estimated means\nAverage outcome per level\nmargins [categorical variable]\nPairwise comparisons between groups\nmargins [categorical variable], pwcompare(ci) // Produce confidence intervals, default\nmargins [categorical variable], pwcompare(pv) // Produce p-values\n\nDo not preface the categorical variable with i..\nIn general, binary (0/1) variables can be treated as continuous or categorical in the model. The model is identical either way, but treating them as categorical lets margins operate in this easy fashion."
+  },
+  {
+    "objectID": "index.html#in-the-presence-of-covariates",
+    "href": "index.html#in-the-presence-of-covariates",
+    "title": "Stata’s margins command",
+    "section": "In the presence of covariates",
+    "text": "In the presence of covariates\n. regress wage age i.married, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |  -.0692705   .0396596    -1.75   0.081     -.147044    .0085029\n             |\n     married |\n    Married  |  -.4958806   .2530888    -1.96   0.050    -.9921934    .0004321\n       _cons |   10.79748   1.568569     6.88   0.000     7.721481    13.87348\n------------------------------------------------------------------------------\n\n. margins married\n\nPredictive margins                                       Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   8.085319   .2027826    39.87   0.000     7.687658    8.482981\n    Married  |   7.589439    .151412    50.12   0.000     7.292517    7.886361\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#visualization-of-margins",
+    "href": "index.html#visualization-of-margins",
+    "title": "Stata’s margins command",
+    "section": "Visualization of margins",
+    "text": "Visualization of margins\nmargins married\n\nSometimes called “as observed”."
+  },
+  {
+    "objectID": "index.html#choices-for-ways-to-handle-other-covariates",
+    "href": "index.html#choices-for-ways-to-handle-other-covariates",
+    "title": "Stata’s margins command",
+    "section": "Choices for ways to handle other covariates",
+    "text": "Choices for ways to handle other covariates\n\nAs observed (default)\n\nAverage of predicted outcomes\n\natmeans\n\nPredicted outcome at average\n\nat specific values\n\nPredicted outcome at specific values\n\nCombination (if multiple covariates)"
+  },
+  {
+    "objectID": "index.html#visualization-of-margins-atmeans",
+    "href": "index.html#visualization-of-margins-atmeans",
+    "title": "Stata’s margins command",
+    "section": "Visualization of margins, atmeans",
+    "text": "Visualization of margins, atmeans\nmargins married, atmeans"
+  },
+  {
+    "objectID": "index.html#atmeans",
+    "href": "index.html#atmeans",
+    "title": "Stata’s margins command",
+    "section": "atmeans",
+    "text": "atmeans\n. margins married, atmeans\n\nAdjusted predictions                                     Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\nAt: age       = 39.15316 (mean)\n    0.married = .3579697 (mean)\n    1.married = .6420303 (mean)\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   8.085319   .2027826    39.87   0.000     7.687658    8.482981\n    Married  |   7.589439    .151412    50.12   0.000     7.292517    7.886361\n------------------------------------------------------------------------------\n\nMeans for married are ignored since we’re requesting at specific values of married.\nAs observed and atmeans are identical for linear models; but differ for generalized linear models (we’ll see later)."
+  },
+  {
+    "objectID": "index.html#at-specific-values",
+    "href": "index.html#at-specific-values",
+    "title": "Stata’s margins command",
+    "section": "at specific values",
+    "text": "at specific values\nWe can manually fix the values of other variables in the model.\nmargins, at(&lt;variable&gt; = (&lt;numlist&gt;) &lt;variable2&gt; = (&lt;numlist&gt;))\nwhere &lt;numlist&gt; can be any of:\n\nspace-separated list of values (3 4 .5 -100)\nintegers between range (2/5 is equivalent to 2 3 4 5)\nrange with step-by instruction (3(.5)5 is equivalent to 3 3.5 4 4.5 5)\nany combination of the above (3 5/7 8(.25)9)"
+  },
+  {
+    "objectID": "index.html#at-specific-values-example",
+    "href": "index.html#at-specific-values-example",
+    "title": "Stata’s margins command",
+    "section": "at specific values example",
+    "text": "at specific values example\n. margins married, at(age = (35(5)45))\n\nAdjusted predictions                                     Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n1._at: age = 35\n2._at: age = 40\n3._at: age = 45\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n _at#married |\n   1#Single  |   8.373011   .2628879    31.85   0.000     7.857482     8.88854\n  1#Married  |    7.87713   .2226589    35.38   0.000     7.440491     8.31377\n   2#Single  |   8.026658   .2051185    39.13   0.000     7.624416      8.4289\n  2#Married  |   7.530778   .1554066    48.46   0.000     7.226022    7.835534\n   3#Single  |   7.680306   .3060744    25.09   0.000     7.080087    8.280524\n  3#Married  |   7.184425   .2781542    25.83   0.000     6.638959    7.729892\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#visualization-of-margins-at...",
+    "href": "index.html#visualization-of-margins-at...",
+    "title": "Stata’s margins command",
+    "section": "Visualization of margins, at(...)",
+    "text": "Visualization of margins, at(...)\nmargins married, at(age = (35(5)45))"
+  },
+  {
+    "objectID": "index.html#at-without-categorical-variables",
+    "href": "index.html#at-without-categorical-variables",
+    "title": "Stata’s margins command",
+    "section": "at without categorical variables",
+    "text": "at without categorical variables\nWe can also use at with continuous variables without a categorical variable.\n. margins, at(age = (35(5)45))\n\nPredictive margins                                       Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n1._at: age = 35\n2._at: age = 40\n3._at: age = 45\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         _at |\n          1  |   8.054641   .2045676    39.37   0.000     7.653479    8.455802\n          2  |   7.708288    .125879    61.24   0.000     7.461436     7.95514\n          3  |   7.361935   .2617012    28.13   0.000     6.848734    7.875137\n------------------------------------------------------------------------------\nIn this case, married is treated just like age was in the previous “as observed” example - held constant."
+  },
+  {
+    "objectID": "index.html#combining-these-effects",
+    "href": "index.html#combining-these-effects",
+    "title": "Stata’s margins command",
+    "section": "Combining these effects",
+    "text": "Combining these effects\nWe can combine “as observed”/atmeans and at when we have multiple predictors.\n. regress wage age i.married i.south, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |  -.0675817   .0393325    -1.72   0.086    -.1447135    .0095502\n             |\n     married |\n    Married  |  -.5039005   .2509983    -2.01   0.045    -.9961138   -.0116873\n             |\n       south |\n      South  |  -1.514432   .2438214    -6.21   0.000    -1.992572   -1.036293\n       _cons |   11.37168   1.558336     7.30   0.000     8.315744    14.42761\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#combining-these-effects-2",
+    "href": "index.html#combining-these-effects-2",
+    "title": "Stata’s margins command",
+    "section": "Combining these effects, 2",
+    "text": "Combining these effects, 2\nregress wage age i.married i.south\n\n. margins married, at(south = (1)) atmeans\n\nAdjusted predictions                                     Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\nAt: age       = 39.15316 (mean)\n    0.married = .3579697 (mean)\n    1.married = .6420303 (mean)\n    south     =        1\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   7.211208   .2454553    29.38   0.000     6.729864    7.692551\n    Married  |   6.707307   .2066834    32.45   0.000     6.301996    7.112618\n------------------------------------------------------------------------------\n\nNote the use of a categorical variable (south) in at().\nRecall that married’s means are ignored."
+  },
+  {
+    "objectID": "index.html#estimated-slopes",
+    "href": "index.html#estimated-slopes",
+    "title": "Stata’s margins command",
+    "section": "Estimated slopes",
+    "text": "Estimated slopes\nEverything we’ve done so far is estimating means. We can estimate slopes with the dydx option.\n. regress wage age, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |  -.0680236   .0396796    -1.71   0.087    -.1458362     .009789\n       _cons |   10.43029   1.558318     6.69   0.000     7.374394    13.48618\n------------------------------------------------------------------------------\n\n. margins, dydx(age)\n\nAverage marginal effects                                 Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\ndy/dx wrt:  age\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |      dy/dx   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |  -.0680236   .0396796    -1.71   0.087    -.1458362     .009789\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#non-linear-relationships",
+    "href": "index.html#non-linear-relationships",
+    "title": "Stata’s margins command",
+    "section": "Non-linear relationships",
+    "text": "Non-linear relationships\n. regress wage c.age##c.age, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |   .7033681   1.084471     0.65   0.517    -1.423304     2.83004\n             |\n c.age#c.age |  -.0097745   .0137323    -0.71   0.477    -.0367039     .017155\n             |\n       _cons |  -4.696709   21.30931    -0.22   0.826    -46.48474    37.09133\n------------------------------------------------------------------------------\n\n. margins, dydx(age)\n\nAverage marginal effects                                 Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\ndy/dx wrt:  age\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |      dy/dx   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |  -.0620333   .0405666    -1.53   0.126    -.1415852    .0175186\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#estimated-marginal-slopes-comments",
+    "href": "index.html#estimated-marginal-slopes-comments",
+    "title": "Stata’s margins command",
+    "section": "Estimated marginal slopes, comments",
+    "text": "Estimated marginal slopes, comments\n\nThis will get a lot more useful when we discuss interactions next.\nHandling additional covariates with “as observed”/atmeans or at continues to work.\nIn linear models, “average slope” and “slope at average” are equivalent - not true in non-linear models.\nThere are additional options such as eyex for “elasticities”, an extremely similar concept in econometrics."
+  },
+  {
+    "objectID": "index.html#instantenous-slopes",
+    "href": "index.html#instantenous-slopes",
+    "title": "Stata’s margins command",
+    "section": "Instantenous slopes",
+    "text": "Instantenous slopes\nFor non-linear trends, the slope changes across values of the predictor.\n\n\n\n(This is also the tangent, and is obtained by taking the derivative, which is often written as \\(\\frac{dy}{dx}\\), hence the option dydx.)"
+  },
+  {
+    "objectID": "index.html#estimating-the-instantenous-slope",
+    "href": "index.html#estimating-the-instantenous-slope",
+    "title": "Stata’s margins command",
+    "section": "Estimating the instantenous slope",
+    "text": "Estimating the instantenous slope\nregress wage c.age##c.age\n\n. margins, dydx(age) at(age = (35 40 45))\n\nConditional marginal effects                             Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\ndy/dx wrt:  age\n1._at: age = 35\n2._at: age = 40\n3._at: age = 45\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |      dy/dx   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\nage          |\n         _at |\n          1  |   .0191564   .1287496     0.15   0.882    -.2333243    .2716372\n          2  |  -.0785881   .0423687    -1.85   0.064    -.1616741     .004498\n          3  |  -.1763326   .1572552    -1.12   0.262    -.4847135    .1320483\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#examining-interactions",
+    "href": "index.html#examining-interactions",
+    "title": "Stata’s margins command",
+    "section": "Examining interactions",
+    "text": "Examining interactions\nRecall our starting example with a categorical variable and the regression coefficients only telling part of the story.\nregress wage i.race\n\n\n\n\nGroup\nAverage\n    \nComparison\nEstimate\n\n\n\n\nWhite\n8.083\n\nWhite vs Black\n-1.238\n\n\nBlack\n???\n\nWhite vs Other\n0.468\n\n\nOther\n???\n\nBlack vs Other\n???\n\n\n\n\nWe only get 50% of relevant pieces of information from the regression coefficients.\nWhen we begin to include interactions in the model, even less useful information can be extracted via regression coefficients alone."
+  },
+  {
+    "objectID": "index.html#categorical-categorical-interaction",
+    "href": "index.html#categorical-categorical-interaction",
+    "title": "Stata’s margins command",
+    "section": "Categorical-categorical interaction",
+    "text": "Categorical-categorical interaction\n. regress wage i.married##i.race, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n    Married  |  -1.204674    .309034    -3.90   0.000    -1.810697   -.5986511\n             |\n        race |\n      Black  |  -2.194947    .415727    -5.28   0.000    -3.010198   -1.379697\n      Other  |  -.4967496   2.037457    -0.24   0.807    -4.492251    3.498752\n             |\nmarried#race |\n    Married #|\n      Black  |   1.439186   .5661142     2.54   0.011     .3290224    2.549349\n    Married #|\n      Other  |   1.375469   2.448432     0.56   0.574    -3.425963    6.176901\n             |\n       _cons |   8.929288   .2590186    34.47   0.000     8.421347     9.43723\n------------------------------------------------------------------------------\n\\(3\\times2 = 6\\) total subgroups, \\(\\binom{6}{2} = 15\\) different pairwise comparisons.\nRegression coefficients: 1 subgroup, 5 pairwise comparisons - only 29% of relevant pieces of information!"
+  },
+  {
+    "objectID": "index.html#margins-syntax-with-interactions",
+    "href": "index.html#margins-syntax-with-interactions",
+    "title": "Stata’s margins command",
+    "section": "margins syntax with interactions",
+    "text": "margins syntax with interactions\n\nAverage of each level of married, averaged across race:\nmargins married\nAverage of each unique subgroup of married and race:\nmargins married#race\nNote the single # instead of the ## in the model. Putting ## would produce all of margins married, margins race, and margins   married#race.\nPairwise differences between all unique subgroups:\nmargins married#race, pwcompare(ci) // default\nmargins married#race, pwcompare(pv)\nAverage effect of marriage within levels of race:\nmargins married@race, contrast(ci nowald)\nmargins married@race, contrast(pv nowald)\nNote the use of @ instead of # when dealing with the constrast() option."
+  },
+  {
+    "objectID": "index.html#marginal-effects",
+    "href": "index.html#marginal-effects",
+    "title": "Stata’s margins command",
+    "section": "Marginal effects",
+    "text": "Marginal effects\n. margins married\n\nPredictive margins                                       Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |    8.35379   .2081151    40.14   0.000     7.945671    8.761909\n    Married  |   7.538612   .1528743    49.31   0.000     7.238821    7.838402\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#estimated-means-in-all-unique-subgroups",
+    "href": "index.html#estimated-means-in-all-unique-subgroups",
+    "title": "Stata’s margins command",
+    "section": "Estimated means in all unique subgroups",
+    "text": "Estimated means in all unique subgroups\n. margins married#race\n\nAdjusted predictions                                     Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\nmarried#race |\n     Single #|\n      White  |   8.929288   .2590186    34.47   0.000     8.421347     9.43723\n     Single #|\n      Black  |   6.734341   .3251742    20.71   0.000     6.096667    7.372016\n     Single #|\n      Other  |   8.432539   2.020926     4.17   0.000     4.469456    12.39562\n    Married #|\n      White  |   7.724614   .1685569    45.83   0.000      7.39407    8.055158\n    Married #|\n      Black  |   6.968853   .3453187    20.18   0.000     6.291675    7.646031\n    Married #|\n      Other  |   8.603333   1.347284     6.39   0.000     5.961278    11.24539\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#all-pairwise-comparisons",
+    "href": "index.html#all-pairwise-comparisons",
+    "title": "Stata’s margins command",
+    "section": "All pairwise comparisons",
+    "text": "All pairwise comparisons\n. margins married#race, pwcompare(pv)\n\nPairwise comparisons of adjusted predictions             Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n\n----------------------------------------------------------------------------\n                                    |            Delta-method    Unadjusted\n                                    |   Contrast   std. err.      t    P&gt;|t|\n------------------------------------+---------------------------------------\n                       married#race |\n  (Single#Black) vs (Single#White)  |  -2.194947    .415727    -5.28   0.000\n  (Single#Other) vs (Single#White)  |  -.4967496   2.037457    -0.24   0.807\n (Married#White) vs (Single#White)  |  -1.204674    .309034    -3.90   0.000\n (Married#Black) vs (Single#White)  |  -1.960435   .4316661    -4.54   0.000\n (Married#Other) vs (Single#White)  |  -.3259551   1.371956    -0.24   0.812\n  (Single#Other) vs (Single#Black)  |   1.698198    2.04692     0.83   0.407\n (Married#White) vs (Single#Black)  |   .9902731   .3662645     2.70   0.007\n (Married#Black) vs (Single#Black)  |   .2345117    .474324     0.49   0.621\n (Married#Other) vs (Single#Black)  |   1.868992    1.38597     1.35   0.178\n (Married#White) vs (Single#Other)  |  -.7079245   2.027943    -0.35   0.727\n (Married#Black) vs (Single#Other)  |  -1.463686   2.050216    -0.71   0.475\n (Married#Other) vs (Single#Other)  |   .1707945   2.428851     0.07   0.944\n(Married#Black) vs (Married#White)  |  -.7557614   .3842609    -1.97   0.049\n(Married#Other) vs (Married#White)  |    .878719   1.357787     0.65   0.518\n(Married#Other) vs (Married#Black)  |    1.63448   1.390834     1.18   0.240\n----------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#effect-of-married-within-each-race",
+    "href": "index.html#effect-of-married-within-each-race",
+    "title": "Stata’s margins command",
+    "section": "Effect of married within each race",
+    "text": "Effect of married within each race\n. margins married@race, contrast(pv nowald)\n\nContrasts of adjusted predictions                        Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n\n-----------------------------------------------------------------\n                         |            Delta-method\n                         |   Contrast   std. err.      t    P&gt;|t|\n-------------------------+---------------------------------------\n            married@race |\n(Married vs base) White  |  -1.204674    .309034    -3.90   0.000\n(Married vs base) Black  |   .2345117    .474324     0.49   0.621\n(Married vs base) Other  |   .1707945   2.428851     0.07   0.944\n-----------------------------------------------------------------\nNote the use of @ again."
+  },
+  {
+    "objectID": "index.html#contrast-options",
+    "href": "index.html#contrast-options",
+    "title": "Stata’s margins command",
+    "section": "contrast options",
+    "text": "contrast options\nWe can run just margins married@race without a contrast argument but it will only produce a Wald test table. Switching married@race to race@married:\n. margins race@married\n\nContrasts of adjusted predictions                        Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n\n------------------------------------------------\n             |         df           F        P&gt;F\n-------------+----------------------------------\nrace@married |\n     Single  |          2       13.95     0.0000\n    Married  |          2        2.22     0.1089\n      Joint  |          4        8.09     0.0000\n             |\n Denominator |       2240\n------------------------------------------------\nnowald option to contrast suppresses this table; pv or ci produce the estimate table. (So contrast(ci) without nowald would produce both tables.)"
+  },
+  {
+    "objectID": "index.html#effect-of-race-within-each-married",
+    "href": "index.html#effect-of-race-within-each-married",
+    "title": "Stata’s margins command",
+    "section": "Effect of race within each married",
+    "text": "Effect of race within each married\n. margins race@married, contrast(pv nowald)\n\nContrasts of adjusted predictions                        Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n\n-----------------------------------------------------------------\n                         |            Delta-method\n                         |   Contrast   std. err.      t    P&gt;|t|\n-------------------------+---------------------------------------\n            race@married |\n (Black vs base) Single  |  -2.194947    .415727    -5.28   0.000\n(Black vs base) Married  |  -.7557614   .3842609    -1.97   0.049\n (Other vs base) Single  |  -.4967496   2.037457    -0.24   0.807\n(Other vs base) Married  |    .878719   1.357787     0.65   0.518\n-----------------------------------------------------------------\nSince race has more than 2 categories, each comparison is against a reference category. This isn’t a problem if the first variable in the margins call is binary, but is annoying otherwise."
+  },
+  {
+    "objectID": "index.html#displaying-all-pairwise-comparisons-within-married-status",
+    "href": "index.html#displaying-all-pairwise-comparisons-within-married-status",
+    "title": "Stata’s margins command",
+    "section": "Displaying all pairwise comparisons within married status",
+    "text": "Displaying all pairwise comparisons within married status\n. margins race, at(married = (0)) pwcompare(pv)\n\nPairwise comparisons of adjusted predictions             Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\nAt: married = 0\n\n--------------------------------------------------------\n                |            Delta-method    Unadjusted\n                |   Contrast   std. err.      t    P&gt;|t|\n----------------+---------------------------------------\n           race |\nBlack vs White  |  -2.194947    .415727    -5.28   0.000\nOther vs White  |  -.4967496   2.037457    -0.24   0.807\nOther vs Black  |   1.698198    2.04692     0.83   0.407\n--------------------------------------------------------\nRepeat for married = (1)"
+  },
+  {
+    "objectID": "index.html#categorical-continuous-interactions",
+    "href": "index.html#categorical-continuous-interactions",
+    "title": "Stata’s margins command",
+    "section": "Categorical-continuous interactions",
+    "text": "Categorical-continuous interactions\n. regress wage c.age##i.race, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |  -.0545975   .0459913    -1.19   0.235    -.1447876    .0355926\n             |\n        race |\n      Black  |   1.403328   3.590285     0.39   0.696    -5.637306    8.443963\n      Other  |   27.42823   14.02561     1.96   0.051    -.0763282    54.93278\n             |\n  race#c.age |\n      Black  |  -.0687157   .0919576    -0.75   0.455    -.2490468    .1116154\n      Other  |  -.6858332   .3556579    -1.93   0.054    -1.383287    .0116202\n             |\n       _cons |   10.22718   1.811727     5.64   0.000     6.674339    13.78002\n------------------------------------------------------------------------------\n\n\n\n\n\n\nGroup\nSlope\n\n\n\n\nWhite\n-0.055\n\n\nBlack\n???\n\n\nOther\n???\n\n\n\n\n\n\n\n\nComparison\nDiff. in slopes\n\n\n\n\nWhite vs Black\n-0.069\n\n\nWhite vs Other\n-0.686\n\n\nBlack vs Other\n???"
+  },
+  {
+    "objectID": "index.html#estimating-marginal-slopes-in-each-race",
+    "href": "index.html#estimating-marginal-slopes-in-each-race",
+    "title": "Stata’s margins command",
+    "section": "Estimating marginal slopes in each race",
+    "text": "Estimating marginal slopes in each race\n. margins race, dydx(age)\n\nAverage marginal effects                                 Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\ndy/dx wrt:  age\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |      dy/dx   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\nage          |\n        race |\n      White  |  -.0545975   .0459913    -1.19   0.235    -.1447876    .0355926\n      Black  |  -.1233132   .0796304    -1.55   0.122    -.2794703    .0328439\n      Other  |  -.7404307   .3526717    -2.10   0.036    -1.432028   -.0488332\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#testing-for-differences-between-marginal-slopes",
+    "href": "index.html#testing-for-differences-between-marginal-slopes",
+    "title": "Stata’s margins command",
+    "section": "Testing for differences between marginal slopes",
+    "text": "Testing for differences between marginal slopes\n. margins race, dydx(age) pwcompare(pv)\n\nPairwise comparisons of average marginal effects\n\nModel VCE: OLS                                           Number of obs = 2,246\n\nExpression: Linear prediction, predict()\ndy/dx wrt:  age\n\n--------------------------------------------------------\n                |   Contrast Delta-method    Unadjusted\n                |      dy/dx   std. err.      t    P&gt;|t|\n----------------+---------------------------------------\nage             |\n           race |\nBlack vs White  |  -.0687157   .0919576    -0.75   0.455\nOther vs White  |  -.6858332   .3556579    -1.93   0.054\nOther vs Black  |  -.6171175   .3615499    -1.71   0.088\n--------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#looking-at-it-the-other-way",
+    "href": "index.html#looking-at-it-the-other-way",
+    "title": "Stata’s margins command",
+    "section": "Looking at it the other way",
+    "text": "Looking at it the other way\nPrior was “Differences in effect of age across race”. Now looking at “differences in races across values of age”:\n. margins race, at(age = (35 45))\n\nAdjusted predictions                                     Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n1._at: age = 35\n2._at: age = 45\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n    _at#race |\n    1#White  |   8.316265   .2421443    34.34   0.000     7.841414    8.791115\n    1#Black  |   7.314544   .3851413    18.99   0.000     6.559273    8.069815\n    1#Other  |   11.74033   1.889093     6.21   0.000     8.035773    15.44488\n    2#White  |   7.770289   .2990187    25.99   0.000     7.183907    8.356672\n    2#Black  |   6.081412   .5468841    11.12   0.000     5.008959    7.153865\n    2#Other  |   4.336022   2.300178     1.89   0.060    -.1746818    8.846725\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#testing-for-differences-of-marginal-means-at-specific-values-of-age",
+    "href": "index.html#testing-for-differences-of-marginal-means-at-specific-values-of-age",
+    "title": "Stata’s margins command",
+    "section": "Testing for differences of marginal means at specific values of age",
+    "text": "Testing for differences of marginal means at specific values of age\n. margins race, at(age = (35)) pwcompare(pv)\n\nPairwise comparisons of adjusted predictions             Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\nAt: age = 35\n\n--------------------------------------------------------\n                |            Delta-method    Unadjusted\n                |   Contrast   std. err.      t    P&gt;|t|\n----------------+---------------------------------------\n           race |\nBlack vs White  |  -1.001721    .454937    -2.20   0.028\nOther vs White  |   3.424064   1.904549     1.80   0.072\nOther vs Black  |   4.425785   1.927954     2.30   0.022\n--------------------------------------------------------\nIf our at contains multiple values of age, we’ll get too many uninteresting results, so repeat with margins race, at(age = (45)) pwcompare(pv).\nBe precise your choice of age values - junk in, junk out."
+  },
+  {
+    "objectID": "index.html#continuous-continuous-interactions",
+    "href": "index.html#continuous-continuous-interactions",
+    "title": "Stata’s margins command",
+    "section": "Continuous-continuous interactions",
+    "text": "Continuous-continuous interactions\nWith a continuous-continuous interaction, we generally want to estimate the slope of one variable at specific values of the other variable.\n. regress wage c.age##c.ttl_exp\n\n      Source |       SS           df       MS      Number of obs   =     2,246\n-------------+----------------------------------   F(3, 2242)      =     62.17\n       Model |  5711.33802         3  1903.77934   Prob &gt; F        =    0.0000\n    Residual |  68656.6294     2,242  30.6229391   R-squared       =    0.0768\n-------------+----------------------------------   Adj R-squared   =    0.0756\n       Total |  74367.9674     2,245  33.1260434   Root MSE        =    5.5338\n\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |   .0585611   .1082827     0.54   0.589    -.1537837    .2709059\n     ttl_exp |   .9585974   .3281056     2.92   0.004     .3151748     1.60202\n             |\n       c.age#|\n   c.ttl_exp |  -.0155082   .0082317    -1.88   0.060    -.0316508    .0006343\n             |\n       _cons |   1.096482   4.282121     0.26   0.798    -7.300854    9.493817\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#marginal-slope-at-specific-values",
+    "href": "index.html#marginal-slope-at-specific-values",
+    "title": "Stata’s margins command",
+    "section": "Marginal slope at specific values",
+    "text": "Marginal slope at specific values\n. margins, dydx(age) at(ttl_exp = (5(5)20))\n\nAverage marginal effects                                 Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\ndy/dx wrt:  age\n1._at: ttl_exp =  5\n2._at: ttl_exp = 10\n3._at: ttl_exp = 15\n4._at: ttl_exp = 20\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |      dy/dx   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\nage          |\n         _at |\n          1  |  -.0189801   .0713234    -0.27   0.790    -.1588469    .1208867\n          2  |  -.0965213   .0428597    -2.25   0.024    -.1805701   -.0124725\n          3  |  -.1740626     .04444    -3.92   0.000    -.2612104   -.0869147\n          4  |  -.2516038   .0741681    -3.39   0.001    -.3970492   -.1061584\n------------------------------------------------------------------------------\nWe can of course reverse the “focal” variable with the “moderator”: margins, dydx(ttl_exp) at(age = (35(5)45))."
+  },
+  {
+    "objectID": "index.html#choosing-values-of-continuous-variables",
+    "href": "index.html#choosing-values-of-continuous-variables",
+    "title": "Stata’s margins command",
+    "section": "Choosing values of continuous variables",
+    "text": "Choosing values of continuous variables\nBe sure to choose reasonable values of continuous variables.\n. hist ttl_exp\n(bin=33, start=.11538462, width=.87179486)"
+  },
+  {
+    "objectID": "index.html#marginsplot",
+    "href": "index.html#marginsplot",
+    "title": "Stata’s margins command",
+    "section": "marginsplot",
+    "text": "marginsplot\n\nmarginsplot is a post-post-estimation command\n\nYou can run it after a margins call.\n\nAny margins call with pairwise comparisons (pwcompare or using @) may produce silly results.\nmarginsplot takes a lot of the standard plotting options. There are a few specific options that are useful:\n\nxdim() defines the x-axis, useful if Stata chooses the wrong by default\nrecast() allows us to use a different plot type for the estimates.\nrecastci() allows us to use a different plot type for the confidence bounds.\n\nmarginsplot when there’s an interaction produces an “interaction plot.”"
+  },
+  {
+    "objectID": "index.html#estimated-means-1",
+    "href": "index.html#estimated-means-1",
+    "title": "Stata’s margins command",
+    "section": "Estimated means",
+    "text": "Estimated means\n. quietly regress wage i.race\n\n. quietly margins race\n\n. marginsplot\n\nVariables that uniquely identify margins: race"
+  },
+  {
+    "objectID": "index.html#estimated-means-as-bar-chart",
+    "href": "index.html#estimated-means-as-bar-chart",
+    "title": "Stata’s margins command",
+    "section": "Estimated means as bar chart",
+    "text": "Estimated means as bar chart\n. marginsplot, recast(bar)\n\nVariables that uniquely identify margins: race"
+  },
+  {
+    "objectID": "index.html#plotting-non-linear-slopes",
+    "href": "index.html#plotting-non-linear-slopes",
+    "title": "Stata’s margins command",
+    "section": "Plotting non-linear slopes",
+    "text": "Plotting non-linear slopes\n. quietly regress wage c.age##c.age\n\n. margins, dydx(age) at(age = (35(5)45))\n\nConditional marginal effects                             Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\ndy/dx wrt:  age\n1._at: age = 35\n2._at: age = 40\n3._at: age = 45\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |      dy/dx   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\nage          |\n         _at |\n          1  |   .0191564   .1287496     0.15   0.882    -.2333243    .2716372\n          2  |  -.0785881   .0423687    -1.85   0.064    -.1616741     .004498\n          3  |  -.1763326   .1572552    -1.12   0.262    -.4847135    .1320483\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#plotting-non-linear-slopes-2",
+    "href": "index.html#plotting-non-linear-slopes-2",
+    "title": "Stata’s margins command",
+    "section": "Plotting non-linear slopes, 2",
+    "text": "Plotting non-linear slopes, 2\n. quietly margins, at(age = (35(.5)45)) nose\n\n. marginsplot, recast(line)\n\nVariables that uniquely identify margins: age\n\n\n\nnose option suppresses standard errors and performs much faster calculation too! I don’t recommend this for final results, but useful during development of models."
+  },
+  {
+    "objectID": "index.html#interaction-plot-categorical-continuous",
+    "href": "index.html#interaction-plot-categorical-continuous",
+    "title": "Stata’s margins command",
+    "section": "Interaction plot, categorical-continuous",
+    "text": "Interaction plot, categorical-continuous\n. quietly regress wage i.race##c.age\n\n. quietly margins race, at(age = (35(5)45))\n\n. marginsplot\n\nVariables that uniquely identify margins: age race"
+  },
+  {
+    "objectID": "index.html#interaction-plot-continuous-continuous",
+    "href": "index.html#interaction-plot-continuous-continuous",
+    "title": "Stata’s margins command",
+    "section": "Interaction plot, continuous-continuous",
+    "text": "Interaction plot, continuous-continuous\n. quietly regress wage c.ttl_exp##c.age\n\n. quietly margins, at(age = (35(5)45) ttl_exp = (5(5)15))\n\n. marginsplot\n\nVariables that uniquely identify margins: age ttl_exp"
+  },
+  {
+    "objectID": "index.html#switching-the-x-dimension",
+    "href": "index.html#switching-the-x-dimension",
+    "title": "Stata’s margins command",
+    "section": "Switching the x-dimension",
+    "text": "Switching the x-dimension\n. quietly regress wage c.ttl_exp##c.age\n\n. quietly margins, at(age = (35(5)45) ttl_exp = (5(5)15))\n\n. marginsplot, xdim(ttl_exp)\n\nVariables that uniquely identify margins: age ttl_exp"
+  },
+  {
+    "objectID": "index.html#margins-with-non-linear-models",
+    "href": "index.html#margins-with-non-linear-models",
+    "title": "Stata’s margins command",
+    "section": "margins with non-linear models",
+    "text": "margins with non-linear models\nThe margins command produces estimates on the scale of the outcome. E.g. for a logistic regression model, the results are in the probability scale.\n. logit union c.hours##i.married, or nolog\n\nLogistic regression                                     Number of obs =  1,877\n                                                        LR chi2(3)    =  12.03\n                                                        Prob &gt; chi2   = 0.0073\nLog likelihood = -1040.3272                             Pseudo R2     = 0.0057\n\n------------------------------------------------------------------------------\n       union | Odds ratio   Std. err.      z    P&gt;|z|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n       hours |   1.001253   .0108298     0.12   0.908     .9802502    1.022705\n             |\n     married |\n    Married  |   .4305923   .2201786    -1.65   0.099      .158057    1.173056\n             |\n     married#|\n     c.hours |\n    Married  |    1.01625   .0129394     1.27   0.206     .9912034     1.04193\n             |\n       _cons |   .3632802   .1597701    -2.30   0.021      .153421    .8601988\n------------------------------------------------------------------------------\nNote: _cons estimates baseline odds."
+  },
+  {
+    "objectID": "index.html#margins-after-logit",
+    "href": "index.html#margins-after-logit",
+    "title": "Stata’s margins command",
+    "section": "margins after logit",
+    "text": "margins after logit\n. margins married, at(hours = 40)\n\nAdjusted predictions                                     Number of obs = 1,877\nModel VCE: OIM\n\nExpression: Pr(union), predict()\nAt: hours = 40\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      z    P&gt;|z|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   .2763779   .0174778    15.81   0.000     .2421221    .3106337\n    Married  |   .2386115   .0127765    18.68   0.000       .21357    .2636531\n------------------------------------------------------------------------------\nThus the model predicts that 27.64% of unmarried workers and 23.86% of married workers have a positive outcome when working 40 hour weeks."
+  },
+  {
+    "objectID": "index.html#as-observed-vs-atmeans",
+    "href": "index.html#as-observed-vs-atmeans",
+    "title": "Stata’s margins command",
+    "section": "“as observed” vs atmeans",
+    "text": "“as observed” vs atmeans\n. margins married\n\nPredictive margins                                       Number of obs = 1,877\nModel VCE: OIM\n\nExpression: Pr(union), predict()\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      z    P&gt;|z|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   .2757857   .0180805    15.25   0.000     .2403486    .3112228\n    Married  |   .2325589    .012185    19.09   0.000     .2086768    .2564411\n------------------------------------------------------------------------------\n\n. margins married, atmeans\n\nAdjusted predictions                                     Number of obs = 1,877\nModel VCE: OIM\n\nExpression: Pr(union), predict()\nAt: hours     = 37.60522 (mean)\n    0.married = .3489611 (mean)\n    1.married = .6510389 (mean)\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      z    P&gt;|z|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   .2757787   .0181128    15.23   0.000     .2402783    .3112791\n    Married  |   .2311359   .0121309    19.05   0.000     .2073598     .254912\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#marginsplot-after-logit",
+    "href": "index.html#marginsplot-after-logit",
+    "title": "Stata’s margins command",
+    "section": "marginsplot after logit",
+    "text": "marginsplot after logit\n. quietly margins married, at(hours = (30 40 50))\n\n. marginsplot, recastci(rarea) ciopt(color(%20))\n\nVariables that uniquely identify margins: hours married"
+  },
+  {
+    "objectID": "index.html#count-models",
+    "href": "index.html#count-models",
+    "title": "Stata’s margins command",
+    "section": "Count models",
+    "text": "Count models\nFor Poisson models (or negative binomial), the results are in the count scale.\n. poisson wage i.married##c.hours\nnote: noncount dependent variable encountered; if you are fitting an\n      exponential-mean model, consider using robust standard errors.\n\nIteration 0:  Log likelihood = -7536.5998  \nIteration 1:  Log likelihood = -7536.5998  \n\nPoisson regression                                      Number of obs =  2,242\n                                                        LR chi2(3)    = 262.83\n                                                        Prob &gt; chi2   = 0.0000\nLog likelihood = -7536.5998                             Pseudo R2     = 0.0171\n\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n    Married  |   .1773426   .0672074     2.64   0.008     .0456186    .3090667\n       hours |   .0152061   .0013874    10.96   0.000     .0124868    .0179255\n             |\n     married#|\n     c.hours |\n    Married  |    -.00528   .0016525    -3.20   0.001    -.0085188   -.0020411\n             |\n       _cons |   1.485806   .0575035    25.84   0.000     1.373101     1.59851\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#margins-after-poisson",
+    "href": "index.html#margins-after-poisson",
+    "title": "Stata’s margins command",
+    "section": "margins after poisson",
+    "text": "margins after poisson\n. margins married, at(hours = 40)\n\nAdjusted predictions                                     Number of obs = 2,242\nModel VCE: OIM\n\nExpression: Predicted number of events, predict()\nAt: hours = 40\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      z    P&gt;|z|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   8.117728   .1009178    80.44   0.000     7.919933    8.315523\n    Married  |   7.847492   .0774572   101.31   0.000     7.695679    7.999306\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#marginsplot-after-poisson",
+    "href": "index.html#marginsplot-after-poisson",
+    "title": "Stata’s margins command",
+    "section": "marginsplot after poisson",
+    "text": "marginsplot after poisson\n. quietly margins married, at(hours = (35 40 45))\n\n. marginsplot, yscale(range(6 10)) ylabel(6(1)10)\n\nVariables that uniquely identify margins: hours married"
+  },
+  {
+    "objectID": "index.html#margins-versus-regression-coefficients",
+    "href": "index.html#margins-versus-regression-coefficients",
+    "title": "Stata’s margins command",
+    "section": "margins versus regression coefficients",
+    "text": "margins versus regression coefficients\nOf course, in GLMs, the estimated coefficients are not additive on the scale of the outcome.\n\nlogistic models: odds ratios\ncount models: incidence rate ratios\n\nHowever, margins does produce results on the outcome scale.\nTherefore, margins is not an appropriate tool to, for example, obtain odds ratios between all pairs of groups in a categorical variable."
+  },
+  {
+    "objectID": "index.html#why-use-margins-after-a-non-linear-model",
+    "href": "index.html#why-use-margins-after-a-non-linear-model",
+    "title": "Stata’s margins command",
+    "section": "Why use margins after a non-linear model?",
+    "text": "Why use margins after a non-linear model?\n\nProbabilities and counts are easily to interpret than odds ratios and rate ratios.\nInteraction plots are easier to interpret that regression coefficients."
+  },
+  {
+    "objectID": "index.html#if-you-do-want-odds-ratios",
+    "href": "index.html#if-you-do-want-odds-ratios",
+    "title": "Stata’s margins command",
+    "section": "If you do want odds ratios…",
+    "text": "If you do want odds ratios…\n..use the nlcom post-estimation command:\n. logit union i.race, nolog or\n\nLogistic regression                                     Number of obs =  1,878\n                                                        LR chi2(2)    =  12.71\n                                                        Prob &gt; chi2   = 0.0017\nLog likelihood = -1040.2692                             Pseudo R2     = 0.0061\n\n------------------------------------------------------------------------------\n       union | Odds ratio   Std. err.      z    P&gt;|z|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n        race |\n      Black  |   1.501429   .1760094     3.47   0.001     1.193219    1.889249\n      Other  |   1.740066   .7619876     1.26   0.206     .7375959    4.104999\n             |\n       _cons |   .2873454   .0187607   -19.10   0.000     .2528306    .3265719\n------------------------------------------------------------------------------\nNote: _cons estimates baseline odds.\n\n. logit, coeflegend\n\nLogistic regression                                     Number of obs =  1,878\n                                                        LR chi2(2)    =  12.71\n                                                        Prob &gt; chi2   = 0.0017\nLog likelihood = -1040.2692                             Pseudo R2     = 0.0061\n\n------------------------------------------------------------------------------\n       union | Coefficient  Legend\n-------------+----------------------------------------------------------------\n        race |\n      Black  |    .406417  _b[2.race]\n      Other  |   .5539232  _b[3.race]\n             |\n       _cons |   -1.24707  _b[_cons]\n------------------------------------------------------------------------------\n\n. nlcom (white_black: exp(_b[2.race])) (white_other: exp(_b[3.race])) ///\n&gt;     (black_other: exp(_b[2.race] - _b[3.race]))\n\n white_black: exp(_b[2.race])\n white_other: exp(_b[3.race])\n black_other: exp(_b[2.race] - _b[3.race])\n\n------------------------------------------------------------------------------\n       union | Coefficient  Std. err.      z    P&gt;|z|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n white_black |   1.501429   .1760094     8.53   0.000     1.156456    1.846401\n white_other |   1.740066   .7619876     2.28   0.022     .2465981    3.233534\n black_other |   .8628571   .3829566     2.25   0.024     .1122759    1.613438\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#miscellanous-things-about-margins",
+    "href": "index.html#miscellanous-things-about-margins",
+    "title": "Stata’s margins command",
+    "section": "Miscellanous things about margins",
+    "text": "Miscellanous things about margins\n\nmargins are not fitting a different model! It is not a separate c analysis.\nHigher-order interactions work as expected:\n\nregress y a##b##c\nmargins a#b#c (if all categorical)\nmargin a#c, at(b = (3 5)) (if b is continuous only)\n\nThe expression option can apply transformations to margins.\n\nE.g. after logit to get things on probability scale:\n\nmargins, expression(100*predict(pr))\n\n\npost option turns margins into an estimation command"
+  },
+  {
+    "objectID": "index.html#other-resources",
+    "href": "index.html#other-resources",
+    "title": "Stata’s margins command",
+    "section": "Other resources",
+    "text": "Other resources\n\nhttps://errickson.net/marginsnotes/\n\nWorked examples of a number of different marginal targets, including code for both Stata and R\n\nhttps://www.stata.com/manuals/rmargins.pdf\n\n58 pages\n\nhttps://www.stata.com/manuals/rmarginsplot.pdf\n\n35 pages"
+  }
+]
