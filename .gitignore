@@ -1,5 +1,4 @@
 *.log
-*.svg
 _*.Rmd
 stata_markdown/*.Rmd
 .DS_Store
