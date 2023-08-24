@@ -3,3 +3,4 @@
 _*.Rmd
 stata_markdown/*.Rmd
 .DS_Store
+/.quarto/
