@@ -71,9 +71,9 @@
 ::: {.column width="60%"}
 | Comparison | Diff. in Averages |
 |:-:|:-:|
-| White vs Black |       -1.238 |
-| White vs Other |        0.468 |
-| Black vs Other | ??? |
+| Black vs White |       -1.238 |
+| Other vs White |        0.468 |
+| Other vs Black | ??? |
 :::
 
 ::::
@@ -103,16 +103,16 @@ $$
 | Group | Average |
 |:-:|:-:|
 | White |        8.083 |
-| Black |        8.083 +       -1.238 =        6.845 |
+| Black |        8.083 + (      -1.238) =        6.845 |
 | Other |        8.083 +        0.468 =        8.551 |
 :::
 
 ::: {.column width="60%"}
 | Comparison | Diff. in Averages |
 |:-:|:-:|
-| White vs Black |       -1.238 |
-| White vs Other |        0.468 |
-| Black vs Other |        0.468 - (      -1.238) =        1.706 |
+| Black vs White |       -1.238 |
+| Other vs White |        0.468 |
+| Other vs Black |        0.468 - (      -1.238) =        1.706 |
 :::
 
 ::::
@@ -158,7 +158,7 @@ $$
 | Group | Average |
 |:-:|:-:|
 | White |        8.083 |
-| Black |        8.083 +       -1.238 =        6.845 |
+| Black |        8.083 + (      -1.238) =        6.845 |
 | Other |        8.083 +        0.468 =        8.551 |
 </center>
 :::
@@ -192,9 +192,9 @@ Expression: Linear prediction, predict()
 <center>
 | Comparison | Diff. In Averages |
 |:-:|:-:|
-| White vs Black |       -1.238 |
-| White vs Other |        0.468 |
-| Black vs Other |        0.468 -       -1.238 =        1.706 |
+| Black vs White |       -1.238 |
+| Other vs White |        0.468 |
+| Other vs Black |        0.468 - (      -1.238) =        1.706 |
 </center>
 
 ```stata
@@ -240,17 +240,22 @@ margins [categorical variable], pwcompare(pv) // Produce p-values
 ## In the presence of covariates
 
 ```stata
-. regress wage age i.married, noheader
+. regress wage i.married age, noheader
 ------------------------------------------------------------------------------
         wage | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
 -------------+----------------------------------------------------------------
-         age |  -.0692705   .0396596    -1.75   0.081     -.147044    .0085029
-             |
      married |
     Married  |  -.4958806   .2530888    -1.96   0.050    -.9921934    .0004321
+         age |  -.0692705   .0396596    -1.75   0.081     -.147044    .0085029
        _cons |   10.79748   1.568569     6.88   0.000     7.721481    13.87348
 ------------------------------------------------------------------------------
 
+```
+
+The intercept (`_cons`) represents the average predicted value when both
+`married` is at it's reference category *and* `wage` is identically 0.
+
+```stata
 . margins married
 
 Predictive margins                                       Number of obs = 2,246
@@ -306,9 +311,9 @@ Adjusted predictions                                     Number of obs = 2,246
 Model VCE: OLS
 
 Expression: Linear prediction, predict()
-At: age       = 39.15316 (mean)
-    0.married = .3579697 (mean)
+At: 0.married = .3579697 (mean)
     1.married = .6420303 (mean)
+    age       = 39.15316 (mean)
 
 ------------------------------------------------------------------------------
              |            Delta-method
@@ -535,7 +540,7 @@ dy/dx wrt:  age
 - There are additional options such as `eyex` for "elasticities", an extremely
   similar concept in econometrics.
 
-## Instantenous slopes
+## Instantaneous slopes
 
 For non-linear trends, the slope changes across values of the predictor.
 
@@ -546,7 +551,7 @@ For non-linear trends, the slope changes across values of the predictor.
 (This is also the **tangent**, and is obtained by taking the derivative, which
 is often written as $\frac{dy}{dx}$, hence the option `dydx`.)
 
-## Estimating the instantenous slope
+## Estimating the instantaneous slope
 
 ```stata
 regress wage c.age##c.age
@@ -592,9 +597,9 @@ regress wage i.race
 <center>
 | Group | Average | &nbsp;&nbsp;&nbsp;&nbsp;| Comparison | Estimate |
 |:-:|:-:|-|:-:|:-:|
-| White |        8.083 | | White vs Black |       -1.238 |
-| Black | ??? | | White vs Other |        0.468 |
-| Other | ??? | | Black vs Other | ??? |
+| White |        8.083 | | Black vs White |       -1.238 |
+| Black | ??? | | Other vs White |        0.468 |
+| Other | ??? | | Other vs Black | ??? |
 </center>
 
 We only get 50% of relevant pieces of information from the regression
@@ -628,11 +633,11 @@ married#race |
 
 ```
 
-$3\times2 = 6$ total subgroups, $\binom{6}{2} = 15$ different pairwise
-comparisons.
+$3\times2 = 6$ averages, $\binom{6}{2} = 15$ pairwise differences in
+averages.
 
-Regression coefficients: 1 subgroup, 5 pairwise comparisons - only 29% of
-relevant pieces of information!
+Regression coefficients: 1 estimated average, 5 estimated pairwise differences -
+only 29% of relevant pieces of information!
 
 ## `margins` syntax with interactions
 
@@ -649,8 +654,7 @@ relevant pieces of information!
     ```
 
     Note the single `#` instead of the `##` in the model. Putting `##` would
-    produce all of `margins married`, `margins race`, and `margins
-    married#race`.
+    produce all of `margins married`, `margins race`, and `margins married#race`.
 
 - Pairwise differences between all unique subgroups:
 
@@ -666,7 +670,7 @@ relevant pieces of information!
     margins married@race, contrast(pv nowald)
     ```
 
-    Note the use of `@` instead of `#` when dealing with the `constrast()`
+    Note the use of `@` instead of `#` when dealing with the `contrast()`
     option.
 
 ## Marginal effects
@@ -896,9 +900,9 @@ Repeat for `married = (1)`
 ::: {.column width="60%"}
 | Comparison | Diff. in slopes |
 |:-:|:-:|
-| White vs Black |       -0.069 |
-| White vs Other |       -0.686 |
-| Black vs Other | ??? |
+| Black vs White |       -0.069 |
+| Other vs White |       -0.686 |
+| Other vs Black | ??? |
 :::
 
 ::::
@@ -1426,7 +1430,7 @@ However, `margins` *does* produce results on the outcome scale.
 Therefore, `margins` is not an appropriate tool to, for example, obtain odds
 ratios between all pairs of groups in a categorical variable.
 
-## Why use `margins` after a non-linear model?
+### So why use `margins` after a non-linear model?
 
 1. Probabilities and counts are easily to interpret than odds ratios and rate
 ratios.
@@ -1472,31 +1476,31 @@ Log likelihood = -1040.2692                             Pseudo R2     = 0.0061
        _cons |   -1.24707  _b[_cons]
 ------------------------------------------------------------------------------
 
-. nlcom (white_black: exp(_b[2.race])) (white_other: exp(_b[3.race])) ///
->     (black_other: exp(_b[2.race] - _b[3.race]))
+. nlcom (black_white: exp(_b[2.race])) (other_white: exp(_b[3.race])) ///
+>     (other_black: exp(_b[2.race] - _b[3.race]))
 
- white_black: exp(_b[2.race])
- white_other: exp(_b[3.race])
- black_other: exp(_b[2.race] - _b[3.race])
+ black_white: exp(_b[2.race])
+ other_white: exp(_b[3.race])
+ other_black: exp(_b[2.race] - _b[3.race])
 
 ------------------------------------------------------------------------------
        union | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
 -------------+----------------------------------------------------------------
- white_black |   1.501429   .1760094     8.53   0.000     1.156456    1.846401
- white_other |   1.740066   .7619876     2.28   0.022     .2465981    3.233534
- black_other |   .8628571   .3829566     2.25   0.024     .1122759    1.613438
+ black_white |   1.501429   .1760094     8.53   0.000     1.156456    1.846401
+ other_white |   1.740066   .7619876     2.28   0.022     .2465981    3.233534
+ other_black |   .8628571   .3829566     2.25   0.024     .1122759    1.613438
 ------------------------------------------------------------------------------
 
 ```
 
-## Miscellanous things about `margins`
+## Miscellaneous things about `margins`
 
 - `margins` are **not** fitting a different model! It is **not** a separate
-c  analysis.
+  model or analysis.
 - Higher-order interactions work as expected:
   - `regress y a##b##c`
   - `margins a#b#c` (if all categorical)
-  - `margin a#c, at(b = (3 5))` (if `b` is continuous only)
+  - `margin a#c, at(b = (3 5))`
 - The `expression` option can apply transformations to margins.
   - E.g. after `logit` to get things on probability scale:
     - `margins, expression(100*predict(pr))`

@@ -40,9 +40,9 @@ regress wage i.race
 ::: {.column width="60%"}
 | Comparison | Diff. in Averages |
 |:-:|:-:|
-| White vs Black | <<dd_display:%12.3f e(b)[1,2]>> |
-| White vs Other | <<dd_display:%12.3f e(b)[1,3]>> |
-| Black vs Other | ??? |
+| Black vs White | <<dd_display:%12.3f e(b)[1,2]>> |
+| Other vs White | <<dd_display:%12.3f e(b)[1,3]>> |
+| Other vs Black | ??? |
 :::
 
 ::::
@@ -64,16 +64,16 @@ $$
 | Group | Average |
 |:-:|:-:|
 | White | <<dd_display:%12.3f e(b)[1,4]>> |
-| Black | <<dd_display:%12.3f e(b)[1,4]>> + <<dd_display:%12.3f e(b)[1,2]>> = <<dd_display:%12.3f e(b)[1,4] + e(b)[1,2]>> |
+| Black | <<dd_display:%12.3f e(b)[1,4]>> + (<<dd_display:%12.3f e(b)[1,2]>>) = <<dd_display:%12.3f e(b)[1,4] + e(b)[1,2]>> |
 | Other | <<dd_display:%12.3f e(b)[1,4]>> + <<dd_display:%12.3f e(b)[1,3]>> = <<dd_display:%12.3f e(b)[1,4] + e(b)[1,3]>> |
 :::
 
 ::: {.column width="60%"}
 | Comparison | Diff. in Averages |
 |:-:|:-:|
-| White vs Black | <<dd_display:%12.3f e(b)[1,2]>> |
-| White vs Other | <<dd_display:%12.3f e(b)[1,3]>> |
-| Black vs Other | <<dd_display:%12.3f e(b)[1,3]>> - (<<dd_display:%12.3f e(b)[1,2]>>) = <<dd_display:%12.3f e(b)[1,3] - e(b)[1,2]>> |
+| Black vs White | <<dd_display:%12.3f e(b)[1,2]>> |
+| Other vs White | <<dd_display:%12.3f e(b)[1,3]>> |
+| Other vs Black | <<dd_display:%12.3f e(b)[1,3]>> - (<<dd_display:%12.3f e(b)[1,2]>>) = <<dd_display:%12.3f e(b)[1,3] - e(b)[1,2]>> |
 :::
 
 ::::
@@ -104,7 +104,7 @@ regress wage i.race
 | Group | Average |
 |:-:|:-:|
 | White | <<dd_display:%12.3f e(b)[1,4]>> |
-| Black | <<dd_display:%12.3f e(b)[1,4]>> + <<dd_display:%12.3f e(b)[1,2]>> = <<dd_display:%12.3f e(b)[1,4] + e(b)[1,2]>> |
+| Black | <<dd_display:%12.3f e(b)[1,4]>> + (<<dd_display:%12.3f e(b)[1,2]>>) = <<dd_display:%12.3f e(b)[1,4] + e(b)[1,2]>> |
 | Other | <<dd_display:%12.3f e(b)[1,4]>> + <<dd_display:%12.3f e(b)[1,3]>> = <<dd_display:%12.3f e(b)[1,4] + e(b)[1,3]>> |
 </center>
 :::
@@ -124,9 +124,9 @@ margins race
 <center>
 | Comparison | Diff. In Averages |
 |:-:|:-:|
-| White vs Black | <<dd_display:%12.3f e(b)[1,2]>> |
-| White vs Other | <<dd_display:%12.3f e(b)[1,3]>> |
-| Black vs Other | <<dd_display:%12.3f e(b)[1,3]>> - <<dd_display:%12.3f e(b)[1,2]>> = <<dd_display:%12.3f e(b)[1,3] - e(b)[1,2]>> |
+| Black vs White | <<dd_display:%12.3f e(b)[1,2]>> |
+| Other vs White | <<dd_display:%12.3f e(b)[1,3]>> |
+| Other vs Black | <<dd_display:%12.3f e(b)[1,3]>> - (<<dd_display:%12.3f e(b)[1,2]>>) = <<dd_display:%12.3f e(b)[1,3] - e(b)[1,2]>> |
 </center>
 
 ```stata
@@ -159,7 +159,15 @@ margins [categorical variable], pwcompare(pv) // Produce p-values
 
 ```stata
 <<dd_do>>
-regress wage age i.married, noheader
+regress wage i.married age, noheader
+<</dd_do>>
+```
+
+The intercept (`_cons`) represents the average predicted value when both
+`married` is at it's reference category *and* `wage` is identically 0.
+
+```stata
+<<dd_do>>
 margins married
 <</dd_do>>
 ```
@@ -308,7 +316,7 @@ margins, dydx(age)
 - There are additional options such as `eyex` for "elasticities", an extremely
   similar concept in econometrics.
 
-## Instantenous slopes
+## Instantaneous slopes
 
 For non-linear trends, the slope changes across values of the predictor.
 
@@ -319,7 +327,7 @@ For non-linear trends, the slope changes across values of the predictor.
 (This is also the **tangent**, and is obtained by taking the derivative, which
 is often written as $\frac{dy}{dx}$, hence the option `dydx`.)
 
-## Estimating the instantenous slope
+## Estimating the instantaneous slope
 
 ```stata
 regress wage c.age##c.age
@@ -349,9 +357,9 @@ regress wage i.race
 <center>
 | Group | Average | &nbsp;&nbsp;&nbsp;&nbsp;| Comparison | Estimate |
 |:-:|:-:|-|:-:|:-:|
-| White | <<dd_display:%12.3f e(b)[1,4]>> | | White vs Black | <<dd_display:%12.3f e(b)[1,2]>> |
-| Black | ??? | | White vs Other | <<dd_display:%12.3f e(b)[1,3]>> |
-| Other | ??? | | Black vs Other | ??? |
+| White | <<dd_display:%12.3f e(b)[1,4]>> | | Black vs White | <<dd_display:%12.3f e(b)[1,2]>> |
+| Black | ??? | | Other vs White | <<dd_display:%12.3f e(b)[1,3]>> |
+| Other | ??? | | Other vs Black | ??? |
 </center>
 
 We only get 50% of relevant pieces of information from the regression
@@ -368,11 +376,11 @@ regress wage i.married##i.race, noheader
 <</dd_do>>
 ```
 
-$3\times2 = 6$ total subgroups, $\binom{6}{2} = 15$ different pairwise
-comparisons.
+$3\times2 = 6$ averages, $\binom{6}{2} = 15$ pairwise differences in
+averages.
 
-Regression coefficients: 1 subgroup, 5 pairwise comparisons - only 29% of
-relevant pieces of information!
+Regression coefficients: 1 estimated average, 5 estimated pairwise differences -
+only 29% of relevant pieces of information!
 
 ## `margins` syntax with interactions
 
@@ -389,8 +397,7 @@ relevant pieces of information!
     ```
 
     Note the single `#` instead of the `##` in the model. Putting `##` would
-    produce all of `margins married`, `margins race`, and `margins
-    married#race`.
+    produce all of `margins married`, `margins race`, and `margins married#race`.
 
 - Pairwise differences between all unique subgroups:
 
@@ -406,7 +413,7 @@ relevant pieces of information!
     margins married@race, contrast(pv nowald)
     ```
 
-    Note the use of `@` instead of `#` when dealing with the `constrast()`
+    Note the use of `@` instead of `#` when dealing with the `contrast()`
     option.
 
 ## Marginal effects
@@ -501,9 +508,9 @@ regress wage c.age##i.race, noheader
 ::: {.column width="60%"}
 | Comparison | Diff. in slopes |
 |:-:|:-:|
-| White vs Black | <<dd_display:%12.3f e(b)[1,6]>> |
-| White vs Other | <<dd_display:%12.3f e(b)[1,7]>> |
-| Black vs Other | ??? |
+| Black vs White | <<dd_display:%12.3f e(b)[1,6]>> |
+| Other vs White | <<dd_display:%12.3f e(b)[1,7]>> |
+| Other vs Black | ??? |
 :::
 
 ::::
@@ -793,7 +800,7 @@ However, `margins` *does* produce results on the outcome scale.
 Therefore, `margins` is not an appropriate tool to, for example, obtain odds
 ratios between all pairs of groups in a categorical variable.
 
-## Why use `margins` after a non-linear model?
+### So why use `margins` after a non-linear model?
 
 1. Probabilities and counts are easily to interpret than odds ratios and rate
 ratios.
@@ -807,19 +814,19 @@ ratios.
 <<dd_do>>
 logit union i.race, nolog or
 logit, coeflegend
-nlcom (white_black: exp(_b[2.race])) (white_other: exp(_b[3.race])) ///
-    (black_other: exp(_b[2.race] - _b[3.race]))
+nlcom (black_white: exp(_b[2.race])) (other_white: exp(_b[3.race])) ///
+    (other_black: exp(_b[2.race] - _b[3.race]))
 <</dd_do>>
 ```
 
-## Miscellanous things about `margins`
+## Miscellaneous things about `margins`
 
 - `margins` are **not** fitting a different model! It is **not** a separate
-c  analysis.
+  model or analysis.
 - Higher-order interactions work as expected:
   - `regress y a##b##c`
   - `margins a#b#c` (if all categorical)
-  - `margin a#c, at(b = (3 5))` (if `b` is continuous only)
+  - `margin a#c, at(b = (3 5))`
 - The `expression` option can apply transformations to margins.
   - E.g. after `logit` to get things on probability scale:
     - `margins, expression(100*predict(pr))`
