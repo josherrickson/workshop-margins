@@ -74,7 +74,7 @@
     "href": "index.html#choices-for-ways-to-handle-other-covariates",
     "title": "Stata’s margins command",
     "section": "Choices for ways to handle other covariates",
-    "text": "Choices for ways to handle other covariates\n\nAs observed (default)\n\nAverage of predicted outcomes\n\natmeans\n\nPredicted outcome at average\n\nat specific values\n\nPredicted outcome at specific values\n\nCombination (if multiple covariates)"
+    "text": "Choices for ways to handle other covariates\n\nAs observed (default)\n\nAverage of predicted outcomes\n\natmeans\n\nPredicted outcome at average\n\nat specific values\n\nPredicted outcome at specific values\n\nover groups\n\nAverage of predicted outcomes only within each group\n\nCombination (if multiple covariates)"
   },
   {
     "objectID": "index.html#visualization-of-margins-atmeans",
@@ -119,18 +119,32 @@
     "text": "at without categorical variables\nWe can also use at with continuous variables without a categorical variable.\n. margins, at(age = (35(5)45))\n\nPredictive margins                                       Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\n1._at: age = 35\n2._at: age = 40\n3._at: age = 45\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         _at |\n          1  |   8.054641   .2045676    39.37   0.000     7.653479    8.455802\n          2  |   7.708288    .125879    61.24   0.000     7.461436     7.95514\n          3  |   7.361935   .2617012    28.13   0.000     6.848734    7.875137\n------------------------------------------------------------------------------\nIn this case, married is treated just like age was in the previous “as observed” example - held constant."
   },
   {
-    "objectID": "index.html#combining-these-effects",
-    "href": "index.html#combining-these-effects",
+    "objectID": "index.html#visualization-of-margins-over...",
+    "href": "index.html#visualization-of-margins-over...",
     "title": "Stata’s margins command",
-    "section": "Combining these effects",
-    "text": "Combining these effects\nWe can combine “as observed”/atmeans and at when we have multiple predictors.\n. regress wage age i.married i.south, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |  -.0675817   .0393325    -1.72   0.086    -.1447135    .0095502\n             |\n     married |\n    Married  |  -.5039005   .2509983    -2.01   0.045    -.9961138   -.0116873\n             |\n       south |\n      South  |  -1.514432   .2438214    -6.21   0.000    -1.992572   -1.036293\n       _cons |   11.37168   1.558336     7.30   0.000     8.315744    14.42761\n------------------------------------------------------------------------------"
+    "section": "Visualization of margins, over(...)",
+    "text": "Visualization of margins, over(...)\nmargins, over(married)"
   },
   {
-    "objectID": "index.html#combining-these-effects-2",
-    "href": "index.html#combining-these-effects-2",
+    "objectID": "index.html#over",
+    "href": "index.html#over",
     "title": "Stata’s margins command",
-    "section": "Combining these effects, 2",
-    "text": "Combining these effects, 2\nregress wage age i.married i.south\n\n. margins married, at(south = (1)) atmeans\n\nAdjusted predictions                                     Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\nAt: age       = 39.15316 (mean)\n    0.married = .3579697 (mean)\n    1.married = .6420303 (mean)\n    south     =        1\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   7.211208   .2454553    29.38   0.000     6.729864    7.692551\n    Married  |   6.707307   .2066834    32.45   0.000     6.301996    7.112618\n------------------------------------------------------------------------------\n\nNote the use of a categorical variable (south) in at().\nRecall that married’s means are ignored."
+    "section": "over",
+    "text": "over\n. margins, over(married)\n\nPredictive margins                                       Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\nOver:       married\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   8.080765   .2027658    39.85   0.000     7.683137    8.478394\n    Married  |   7.591978    .151405    50.14   0.000     7.295069    7.888887\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#combining-some-of-these-effects",
+    "href": "index.html#combining-some-of-these-effects",
+    "title": "Stata’s margins command",
+    "section": "Combining some of these effects",
+    "text": "Combining some of these effects\nWe can combine some of these when we have multiple predictors. For example,\n. regress wage age i.married i.south, noheader\n------------------------------------------------------------------------------\n        wage | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n         age |  -.0675817   .0393325    -1.72   0.086    -.1447135    .0095502\n             |\n     married |\n    Married  |  -.5039005   .2509983    -2.01   0.045    -.9961138   -.0116873\n             |\n       south |\n      South  |  -1.514432   .2438214    -6.21   0.000    -1.992572   -1.036293\n       _cons |   11.37168   1.558336     7.30   0.000     8.315744    14.42761\n------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "index.html#combining-some-of-these-effects-2",
+    "href": "index.html#combining-some-of-these-effects-2",
+    "title": "Stata’s margins command",
+    "section": "Combining some of these effects, 2",
+    "text": "Combining some of these effects, 2\nregress wage age i.married i.south\n\n. margins married, at(south = (1)) atmeans\n\nAdjusted predictions                                     Number of obs = 2,246\nModel VCE: OLS\n\nExpression: Linear prediction, predict()\nAt: age       = 39.15316 (mean)\n    0.married = .3579697 (mean)\n    1.married = .6420303 (mean)\n    south     =        1\n\n------------------------------------------------------------------------------\n             |            Delta-method\n             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]\n-------------+----------------------------------------------------------------\n     married |\n     Single  |   7.211208   .2454553    29.38   0.000     6.729864    7.692551\n    Married  |   6.707307   .2066834    32.45   0.000     6.301996    7.112618\n------------------------------------------------------------------------------\n\nNote the use of a categorical variable (south) in at().\nRecall that married’s means are ignored."
   },
   {
     "objectID": "index.html#estimated-slopes",

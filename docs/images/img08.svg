@@ -247,25 +247,25 @@
 	<line x1="4326.24" y1="433.86" x2="4326.24" y2="369.06" style="stroke:#F0F0F0;stroke-width:9.72"/>
 	<line x1="4326.24" y1="336.66" x2="4326.24" y2="293.96" style="stroke:#F0F0F0;stroke-width:9.72"/>
 	<defs>
-		<path id="path_zsoFvAtc" d="M628.26 1877.85 L628.26 1877.85 L2477.25 1622.03 L4326.24 1838.03 L4326.24 549.45 L2477.25 824.01 L628.26 626.40 L628.26 1877.85 Z" stroke-linejoin="round"/>
+		<path id="path_ZxUjNcsD" d="M628.26 1877.85 L628.26 1877.85 L2477.25 1622.03 L4326.24 1838.03 L4326.24 549.45 L2477.25 824.01 L628.26 626.40 L628.26 1877.85 Z" stroke-linejoin="round"/>
 	</defs>
 	<defs>
-		<clipPath id="clipPath_ltoEywjx">
-			<use xlink:href="#path_zsoFvAtc"/>
+		<clipPath id="clipPath_veKkiEUI">
+			<use xlink:href="#path_ZxUjNcsD"/>
 		</clipPath>
 	</defs>
-	<use xlink:href="#path_zsoFvAtc" style="stroke:none;fill:#489DFF;fill-opacity:0.20"/>
-	<use xlink:href="#path_zsoFvAtc" style="fill:none;stroke:#1A85FF;stroke-opacity:0.20;stroke-width:19.44" clip-path="url(#clipPath_ltoEywjx)"/>
+	<use xlink:href="#path_ZxUjNcsD" style="stroke:none;fill:#489DFF;fill-opacity:0.20"/>
+	<use xlink:href="#path_ZxUjNcsD" style="fill:none;stroke:#1A85FF;stroke-opacity:0.20;stroke-width:19.44" clip-path="url(#clipPath_veKkiEUI)"/>
 	<defs>
-		<path id="path_FOUvNZmR" d="M628.26 2333.14 L628.26 2333.14 L2477.25 1954.80 L4326.24 1768.16 L4326.24 789.58 L2477.25 1371.26 L628.26 1694.59 L628.26 2333.14 Z" stroke-linejoin="round"/>
+		<path id="path_SAJbIlFY" d="M628.26 2333.14 L628.26 2333.14 L2477.25 1954.80 L4326.24 1768.16 L4326.24 789.58 L2477.25 1371.26 L628.26 1694.59 L628.26 2333.14 Z" stroke-linejoin="round"/>
 	</defs>
 	<defs>
-		<clipPath id="clipPath_CxdeEMLM">
-			<use xlink:href="#path_FOUvNZmR"/>
+		<clipPath id="clipPath_nMBSvFWS">
+			<use xlink:href="#path_SAJbIlFY"/>
 		</clipPath>
 	</defs>
-	<use xlink:href="#path_FOUvNZmR" style="stroke:none;fill:#DD417A;fill-opacity:0.20"/>
-	<use xlink:href="#path_FOUvNZmR" style="fill:none;stroke:#D41159;stroke-opacity:0.20;stroke-width:19.44" clip-path="url(#clipPath_CxdeEMLM)"/>
+	<use xlink:href="#path_SAJbIlFY" style="stroke:none;fill:#DD417A;fill-opacity:0.20"/>
+	<use xlink:href="#path_SAJbIlFY" style="fill:none;stroke:#D41159;stroke-opacity:0.20;stroke-width:19.44" clip-path="url(#clipPath_nMBSvFWS)"/>
 	<path d=" M628.26 1252.13 L2477.08 1223.10 L4326.08 1193.91" stroke-linejoin="round" style="fill:none;stroke:#1A85FF;stroke-width:9.72"/>
 	<circle cx="628.26" cy="1252.13" r="21.74" style="fill:#1A85FF"/>
 	<circle cx="628.26" cy="1252.13" r="16.88" style="fill:none;stroke:#1A85FF;stroke-width:9.72"/>

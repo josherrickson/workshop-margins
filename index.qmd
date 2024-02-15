@@ -292,6 +292,8 @@ Sometimes called "as observed".
    - Predicted outcome at average
 3. `at` specific values
    - Predicted outcome at specific values
+4. `over` groups
+   - Average of predicted outcomes only within each group
 4. Combination (if multiple covariates)
 
 ## Visualization of `margins, atmeans`
@@ -412,10 +414,39 @@ Expression: Linear prediction, predict()
 In this case, `married` is treated just like `age` was in the previous "as
 observed" example - held constant.
 
-## Combining these effects
+## Visualization of `margins, over(...)`
 
-We can combine "as observed"/`atmeans` and `at` when we have multiple
-predictors.
+```stata
+margins, over(married)
+```
+
+![](images/over.png)
+
+## `over`
+
+```stata
+. margins, over(married)
+
+Predictive margins                                       Number of obs = 2,246
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+Over:       married
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+     married |
+     Single  |   8.080765   .2027658    39.85   0.000     7.683137    8.478394
+    Married  |   7.591978    .151405    50.14   0.000     7.295069    7.888887
+------------------------------------------------------------------------------
+
+```
+
+## Combining some of these effects
+
+We can combine some of these when we have multiple predictors. For example,
 
 ```stata
 . regress wage age i.married i.south, noheader
@@ -434,7 +465,7 @@ predictors.
 
 ```
 
-## Combining these effects, 2
+## Combining some of these effects, 2
 
 ```stata
 regress wage age i.married i.south
